@@ -16,16 +16,16 @@ var C = {
     HEIGHT:480
   },
   PLAYER: {
-    SIZE: 20
+    SIZE: 10
   },
   DIRECTION: {
     NOT_MOVING: 0,
-    NORTH: 1,
-    EAST: 2,
-    SOUTH: 3,
-    WEST: 4
+    UP: 1,
+    RIGHT: 2,
+    DOWN: 3,
+    LEFT: 4
   },
-  TICK_TIME: 1000,  
+  TICK_TIME: 100,
 };
 
 
@@ -41,33 +41,23 @@ app.use(express.static(__dirname + '/public'));
 var users = {};
 var numUsers = 0;
 
-var prevMillis = 0;
-
-
 
 // Main loop, will be called every 'X' time 
 function loop() {
-  var d = new Date();
-  var deviation = (d.getTime() - prevMillis) - C.TICK_TIME;
-  // console.log("Looping deviation: " + deviation + " ms");
-  prevMillis = d.getTime();
+  // logLoop();
+  for (var id in users) {
+    var p = users[id];
+    p.move();  
+  }
 
   io.emit('draw', {
     players: users
   });
-
 }
 
 
 function clientConnected(socket) {
-  // console.log("users.length: ",  Object.keys(users));
-  // we store the username in the socket session for this client
-  // console.log("nr of connected users: ", Object.keys(users).length);
-  // var pos = Object.keys(users).length * PLAYER_SIZE;
-  // console.log("pos: ", pos)
-
   var player = new Player(uuid.v4(), getNiceColor(), C.PLAYER.SIZE);
-  // console.log("Connected player: ", player);
   socket.userId = player.id;
 
   addPlayerToBoard(player);
@@ -95,16 +85,13 @@ function addPlayerToBoard(player){
   var pos = Object.keys(users).length * C.PLAYER.SIZE + C.PLAYER.SIZE;
   player.x = pos;
   player.y = pos;
-  player.direction = C.DIRECTION.EAST;
-  console .log("Place player on the board", player);
-
-    users[player.id] = player;
+  player.direction = C.DIRECTION.RIGHT;
+  //console .log("Place player on the board", player);
+  users[player.id] = player;
   ++numUsers;
-
 }
 
 io.on('connection', function (socket) {  
-  //console.log(util.inspect(socket, false, 1));
   clientConnected(socket);
 
   // echo globally (all clients) that a person has connected
@@ -112,7 +99,33 @@ io.on('connection', function (socket) {
     userId: socket.userId,
     numUsers: numUsers
   });
+  
   console.log(socket.userId + " connected");
+
+  // when the client emits 'new message', this listens and executes
+    socket.on('change direction', function (newDirection) {
+      var p = users[socket.userId];
+      // console.log("change direction: " + newDirection + " for player: ", player.id);
+      switch(newDirection) {
+      case 37: // LEFT
+        // newDirection = C.DIRECTION.LEFT;
+        p.left();
+        break;
+      case 38: // UP
+        // newDirection = C.DIRECTION.UP;
+        p.up();
+        break;
+      case 39: // RIGHT 
+        // newDirection = C.DIRECTION.RIGHT;
+        p.right();
+        break;
+      case 40: // DOWN
+        // newDirection = C.DIRECTION.DOWN
+        p.down();
+        break;
+      }
+      // users[socket.userId].direction = newDirection;
+    });
 
 
   // when the user disconnects.. perform this
@@ -139,6 +152,14 @@ function getNiceColor() {
     // '#e21400', '#91580f', '#f8a700', '#f78b00', '#58dc00', '#287b00', 
     // '#a8f07a', '#4ae8c4', '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
   return niceColors[(Math.random() * niceColors.length)|0];
+}
+
+var prevMillis = 0;
+function logLoop() {
+  var d = new Date();
+  var deviation = (d.getTime() - prevMillis) - C.TICK_TIME;
+  console.log("Looping deviation: " + deviation + " ms");
+  prevMillis = d.getTime();
 }
 
 

@@ -6,7 +6,7 @@ $(function() {
   var $usernameInput = $('.usernameInput'); // Input for username
   var $logArea = $('.logArea'); // Char area
   var $currentInput = $usernameInput.focus();
-
+  // var $playField = $('#world');
   // Prompt for setting a username
   var username;
   var connected = false;
@@ -47,7 +47,6 @@ $(function() {
 
 
   // Keyboard events
-
   $window.keydown(function (event) {
     // Auto-focus the current input when a key is typed
     if (!(event.ctrlKey || event.metaKey || event.altKey)) {
@@ -57,7 +56,22 @@ $(function() {
     // When the client hits ENTER on their keyboard
     if (event.which === 13) {
     }
-    // LEFT, RIGHT, UP, DOWN
+
+    var newDirection = 0;
+    switch(event.keyCode) {
+    case 37: // LEFT
+    case 38: // UP
+    case 39: // RIGHT 
+    case 40: // DOWN
+      newDirection = event.keyCode;
+      break;
+    }
+    if(newDirection > 0) {
+      // console.log("newDirection: ", newDirection);
+      // TODO: check if current direction is changed
+      socket.emit("change direction", newDirection);
+    }
+
   });
 
   // Socket events
