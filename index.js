@@ -21,20 +21,20 @@ function getNiceColor() {
   var niceColors = ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', 
       '#d62728', '#ff9896', '#9467bd', '#c5b0d5',  '#8c564b', '#c49c94', '#e377c2', 
       '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22',  '#dbdb8d', '#17becf', '#9edae5'];
+    // '#e21400', '#91580f', '#f8a700', '#f78b00', '#58dc00', '#287b00', 
+    // '#a8f07a', '#4ae8c4', '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
   return niceColors[(Math.random() * niceColors.length)|0];
 }
 
 function clientConnected(socket) {
-
   // we store the username in the socket session for this client
   var username = getNiceColor();
-
   socket.username = username;
   // add the client's username to the global list
   usernames[username] = username;
   ++numUsers;
   // console.log("Resp: " + util.inspect(resp, false, 1));
-  socket.emit('login', {
+  socket.emit('connected', {
     id: username, 
     numUsers: numUsers
   });
@@ -45,7 +45,6 @@ io.on('connection', function (socket) {
   //console.log(util.inspect(socket, false, 1));
   clientConnected(socket);
 
-  
   // echo globally (all clients) that a person has connected
   socket.broadcast.emit('user joined', {
     username: socket.username,
@@ -53,29 +52,6 @@ io.on('connection', function (socket) {
   });
   console.log(socket.username + " connected");
 
-  // when the client emits 'new message', this listens and executes
-  socket.on('new message', function (data) {
-    // we tell the client to execute 'new message'
-    socket.broadcast.emit('new message', {
-      username: socket.username,
-      message: data
-    });
-  });
-
-
-  // when the client emits 'typing', we broadcast it to others
-  socket.on('typing', function () {
-    socket.broadcast.emit('typing', {
-      username: socket.username
-    });
-  });
-
-  // when the client emits 'stop typing', we broadcast it to others
-  socket.on('stop typing', function () {
-    socket.broadcast.emit('stop typing', {
-      username: socket.username
-    });
-  });
 
   // when the user disconnects.. perform this
   socket.on('disconnect', function () {
@@ -91,6 +67,5 @@ io.on('connection', function (socket) {
         numUsers: numUsers
       });
     // }
-
   });
 });
