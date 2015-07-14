@@ -14,9 +14,9 @@ $(function() {
   }
 
 
-  function draw(players) {
-    for (var id in players) {
-      var p = players[id];
+  function draw(world) {
+    for (var id in world.players) {
+      var p = world.players[id];
       drawRect(p.x, p.y, p.size, p.color);
     }
   }
@@ -48,6 +48,10 @@ $(function() {
 
     var newDirection = 0;
     switch(event.keyCode) {
+
+    case 32: // SPACE
+      socket.emit("toggle pause", newDirection);
+      break;
     case 37: // LEFT
     case 38: // UP
     case 39: // RIGHT 
@@ -71,7 +75,7 @@ $(function() {
     setupWorld(data.world);
 
     logClients(data);
-    draw();
+    draw(data.world);
   });
 
   socket.on('user joined', function (data) {
@@ -85,8 +89,8 @@ $(function() {
   });
 
   socket.on('draw', function (data) {
-    // console.log("draw: ", data);
-    draw(data.players);
+    console.log("draw: ", data);
+    draw(data.world);
   });
 
 

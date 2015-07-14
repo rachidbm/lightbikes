@@ -3,12 +3,15 @@ function World(width, height) {
 	this.width = width;
 	this.height = height;
 	this.players = {};
+	this.pause = true;
 }
 
 
 World.prototype.movePlayers = function(player) {
-	for (var id in this.players) {
-		this.players[id].move();
+	if(!this.pause) {
+		for (var id in this.players) {
+			this.players[id].move();
+		}
 	}
 }
 
@@ -25,6 +28,10 @@ World.prototype.addPlayerToBoard = function(player) {
 
 World.prototype.getTotalPlayers = function(player) {
 	return Object.keys(this.players).length;
+}
+
+World.prototype.togglePause = function() {
+	this.pause = !this.pause;
 }
 
 World.prototype.removePlayer = function(player_id) {

@@ -87,6 +87,10 @@ io.on('connection', function (socket) {
   });
 
 
+  socket.on('toggle pause', function (newDirection) {
+    world.togglePause();
+  });
+
   socket.on('change direction', function (newDirection) {
     var p = world.players[socket.userId];
     // console.log("change direction: " + newDirection + " for player: ", player.id);
