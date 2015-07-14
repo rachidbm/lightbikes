@@ -40,7 +40,7 @@ $(function() {
 
   function logClients (data) {
     var message = '';
-    message = " clients: " + data.numUsers;
+    message = " clients: " + data.world.totalPlayers;
     // log(message);
     $logArea.text(message);
   }
@@ -88,12 +88,12 @@ $(function() {
   });
 
   socket.on('user joined', function (data) {
-    // log(data.username + ' joined');
+    console.log(data.username + ' joined, ', data);
     logClients(data);
   });
 
   socket.on('user left', function (data) {
-    // log(data.username + ' left');
+    console.log(data.username + ' left. ', data);
     logClients(data);
   });
 

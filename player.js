@@ -8,7 +8,7 @@ var DIRECTION = {
 
 function Player(id, color, size, x, y) {
 	this.id = id;
-    this.color = color;
+  this.color = color;
 	this.size = size;
 	this.x = x;
 	this.y = y;
@@ -39,6 +39,11 @@ Player.prototype.left = function() {
 	}
 };
 
+Player.prototype.changeDirection = function() { 
+	changeDirection
+}
+
+
 Player.prototype.move = function() { 
 	var step = this.size/2;
 	switch(this.direction) {
@@ -56,7 +61,6 @@ Player.prototype.move = function() {
 	    break;
 	}	
 };
-
 
 
 module.exports = Player;
