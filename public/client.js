@@ -1,19 +1,11 @@
 $(function() {
-  var FADE_TIME = 150; // ms
-
-  // Initialize varibles
   var $window = $(window);
-  var $usernameInput = $('.usernameInput'); // Input for username
   var $logArea = $('.logArea'); // Char area
-  var $currentInput = $usernameInput.focus();
-  // var $playField = $('#world');
-  // Prompt for setting a username
-  var username;
   var connected = false;
 
   var socket = io();
   var ctx = $('#world')[0].getContext("2d");
-  var size = 10;
+
 
   function setupWorld(world) {
     console.log("Setup world: ", world);
@@ -39,10 +31,7 @@ $(function() {
 
 
   function logClients (data) {
-    var message = '';
-    message = " clients: " + data.world.totalPlayers;
-    // log(message);
-    $logArea.text(message);
+    $logArea.text("clients: " + data.totalPlayers);
   }
 
 
@@ -50,7 +39,7 @@ $(function() {
   $window.keydown(function (event) {
     // Auto-focus the current input when a key is typed
     if (!(event.ctrlKey || event.metaKey || event.altKey)) {
-      $currentInput.focus();
+      // $currentInput.focus();
     }
 
     // When the client hits ENTER on their keyboard
@@ -74,12 +63,10 @@ $(function() {
 
   });
 
-  // Socket events
 
   socket.on('connected', function (data) {
     console.log("Connected to server, got ID: ", data.id);
     console.log("data: ", data);
-    username = data.id;
     connected = true;
     setupWorld(data.world);
 
@@ -88,12 +75,12 @@ $(function() {
   });
 
   socket.on('user joined', function (data) {
-    console.log(data.username + ' joined, ', data);
+    console.log(data.player + ' joined, ', data);
     logClients(data);
   });
 
   socket.on('user left', function (data) {
-    console.log(data.username + ' left. ', data);
+    console.log(data.player + ' left. ', data);
     logClients(data);
   });
 

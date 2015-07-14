@@ -30,7 +30,7 @@ var Player = require("./player.js");
 var World = require("./world.js");
 
 var users = {};
-var totalUsers = 0;
+// var totalUsers = 0;
 var world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT);
 
 // Routing
@@ -52,6 +52,7 @@ function loop() {
 
   io.emit('draw', {
     players: world.players, 
+    totalPlayers: world.getTotalPlayers(),
     world: world
   });
 }
@@ -67,7 +68,7 @@ function clientConnected(socket) {
   // console.log("Resp: " + util.inspect(resp, false, 1));
   socket.emit('connected', {
     id: player.id, 
-    totalUsers: totalUsers,
+    totalPlayers: world.getTotalPlayers(),
     world: world
   });
 }
@@ -75,13 +76,14 @@ function clientConnected(socket) {
 
 io.on('connection', function (socket) {  
 
-  console.log(socket.userId + " connected");
   clientConnected(socket);
+  console.log(socket.userId + " connected");
 
   // echo globally (all clients) that a person has connected
   socket.broadcast.emit('user joined', {
-    userId: socket.userId,
-    totalUsers: world.getTotalPlayers()
+    player: socket.userId,
+    totalPlayers: world.getTotalPlayers(),
+    world: world
   });
 
 
@@ -110,11 +112,12 @@ io.on('connection', function (socket) {
       world.removePlayer(socket.userId);
 
       socket.broadcast.emit('user left', {
-        userId: socket.userId,
-        totalUsers: world.getTotalPlayers()
+        player: socket.userId,
+        totalPlayers: world.getTotalPlayers(),
+        world: world
       });
   });
-  
+
 });
 
 
