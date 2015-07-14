@@ -6,6 +6,8 @@ var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
 var util = require('util');
 
+var TICK_TIME = 500;  // ms to waith for each tick
+
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
 });
@@ -16,6 +18,22 @@ app.use(express.static(__dirname + '/public'));
 // usernames which are currently connected to the chat
 var usernames = {};
 var numUsers = 0;
+
+var prevMillis = 0;
+// Main loop, will be called every 'X' time 
+function loop() {
+   var d = new Date();
+  // console.log("Looping " + d);
+  var deviation = (d.getTime() - prevMillis) - TICK_TIME;
+  console.log("Looping deviation: " + deviation + " ms");
+  prevMillis = d.getTime();
+
+  io.emit('move', {
+    serverTime: d
+  });
+
+}
+
 
 function getNiceColor() {
   var niceColors = ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', 
@@ -39,7 +57,6 @@ function clientConnected(socket) {
     numUsers: numUsers
   });
 }
-
 
 io.on('connection', function (socket) {  
   //console.log(util.inspect(socket, false, 1));
@@ -69,3 +86,12 @@ io.on('connection', function (socket) {
     // }
   });
 });
+
+
+
+
+var startLoop = function () {
+    setTimeout(startLoop, TICK_TIME);
+    loop();
+}
+startLoop();

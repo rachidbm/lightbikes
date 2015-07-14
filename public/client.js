@@ -42,7 +42,6 @@ $(function() {
 
   // Socket events
 
-  // When successfully connected to the server
   socket.on('connected', function (data) {
     console.log("Connected to server, got ID: " + data.id)
     username = data.id;
@@ -51,17 +50,18 @@ $(function() {
     $chatPage.show();
   });
 
-  // Whenever the server emits 'user joined', log it in the chat body
   socket.on('user joined', function (data) {
     // log(data.username + ' joined');
     logClients(data);
   });
 
-  // Whenever the server emits 'user left', log it in the chat body
   socket.on('user left', function (data) {
     // log(data.username + ' left');
     logClients(data);
-    
+  });
+
+  socket.on('move', function (data) {
+    console.log("move: " + data.serverTime);
   });
 
 });
