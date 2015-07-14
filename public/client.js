@@ -4,11 +4,10 @@ $(function() {
   // Initialize varibles
   var $window = $(window);
   var $usernameInput = $('.usernameInput'); // Input for username
-  var $messages = $('.messages'); // Messages area
-  var $chatArea = $('.chatArea'); // Char area
-  var $inputMessage = $('.inputMessage'); // Input message input box
+  var $logArea = $('.logArea'); // Char area
+  //var $inputMessage = $('.inputMessage'); // Input message input box
 
-  var $chatPage = $('.chat.page'); // The chatroom page
+  //var $chatPage = $('.chat.page'); // The chatroom page
 
   // Prompt for setting a username
   var username;
@@ -21,9 +20,8 @@ $(function() {
     var message = '';
     message = " clients: " + data.numUsers;
     // log(message);
-    $chatArea.text(message);
+    $logArea.text(message);
   }
-
 
 
   // Keyboard events
@@ -47,7 +45,7 @@ $(function() {
     username = data.id;
     connected = true;
     logClients(data);
-    $chatPage.show();
+    //$chatPage.show();
   });
 
   socket.on('user joined', function (data) {
@@ -61,7 +59,7 @@ $(function() {
   });
 
   socket.on('move', function (data) {
-    console.log("move: " + data.serverTime);
+    // console.log("move: " + data.serverTime);
   });
 
 });
