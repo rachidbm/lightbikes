@@ -5,16 +5,50 @@ $(function() {
   var $window = $(window);
   var $usernameInput = $('.usernameInput'); // Input for username
   var $logArea = $('.logArea'); // Char area
-  //var $inputMessage = $('.inputMessage'); // Input message input box
-
-  //var $chatPage = $('.chat.page'); // The chatroom page
+  var $currentInput = $usernameInput.focus();
 
   // Prompt for setting a username
   var username;
   var connected = false;
-  var $currentInput = $usernameInput.focus();
 
   var socket = io();
+  var ctx = $('#world')[0].getContext("2d");
+  var size = 10;
+
+  function setupWorld(world) {
+    console.log("Setup world: ", world);
+    ctx.canvas.width = world.width;
+    ctx.canvas.height = world.height;
+  }
+
+
+  function draw(players) {
+
+    // console.log(Object.keys(players));
+
+    for (var id in players) {
+      var p = players[id];
+      drawRect(p.x, p.y, p.size, p.color);
+    }
+    // var p = players[0]
+    // //get a reference to the canvas
+    // ctx.fillStyle = username;
+    // ctx.beginPath();
+    // // ctx.arc(75, 75, 10, 0, Math.PI*2, true); 
+    // ctx.rect(50, 50, size, size);
+    // ctx.closePath();
+    // ctx.fill();
+  }
+
+  function drawRect(x, y, size, color) {
+
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.rect(x, y, size, size);
+      ctx.closePath();
+      ctx.fill();      
+  }
+
 
   function logClients (data) {
     var message = '';
@@ -41,11 +75,14 @@ $(function() {
   // Socket events
 
   socket.on('connected', function (data) {
-    console.log("Connected to server, got ID: " + data.id)
+    console.log("Connected to server, got ID: ", data.id);
+    console.log("data: ", data);
     username = data.id;
     connected = true;
+    setupWorld(data.world);
+
     logClients(data);
-    //$chatPage.show();
+    draw();
   });
 
   socket.on('user joined', function (data) {
@@ -58,8 +95,10 @@ $(function() {
     logClients(data);
   });
 
-  socket.on('move', function (data) {
-    // console.log("move: " + data.serverTime);
+  socket.on('draw', function (data) {
+    // console.log("draw: ", data);
+    draw(data.players);
   });
+
 
 });

@@ -5,8 +5,13 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
 var util = require('util');
+var uuid = require('uuid');
+var Player = require("./player.js");
 
-var TICK_TIME = 500;  // ms to waith for each tick
+var TICK_TIME = 1000;  // ms to waith for each tick
+var WORLD_WIDTH = 640;
+var WORLD_HEIGHT = 480;
+var PLAYER_SIZE = 20;
 
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
@@ -15,24 +20,99 @@ server.listen(port, function () {
 // Routing
 app.use(express.static(__dirname + '/public'));
 
-// usernames which are currently connected to the chat
-var usernames = {};
+// userIds which are currently connected to the chat
+var users = {};
 var numUsers = 0;
 
+
 var prevMillis = 0;
+
+
+
 // Main loop, will be called every 'X' time 
 function loop() {
-   var d = new Date();
-  // console.log("Looping " + d);
+  var d = new Date();
   var deviation = (d.getTime() - prevMillis) - TICK_TIME;
-  console.log("Looping deviation: " + deviation + " ms");
+  // console.log("Looping deviation: " + deviation + " ms");
   prevMillis = d.getTime();
 
-  io.emit('move', {
-    serverTime: d
+  io.emit('draw', {
+    players: users
   });
 
 }
+
+
+function clientConnected(socket) {
+  // console.log("users.length: ",  Object.keys(users));
+  // we store the username in the socket session for this client
+  // console.log("nr of connected users: ", Object.keys(users).length);
+  // var pos = Object.keys(users).length * PLAYER_SIZE;
+  // console.log("pos: ", pos)
+
+  var player = new Player(uuid.v4(), getNiceColor(), PLAYER_SIZE);
+  // console.log("Connected player: ", player);
+  socket.userId = player.id;
+
+  addPlayerToBoard(player);
+  // addRandomPlayer();
+
+  // console.log("Resp: " + util.inspect(resp, false, 1));
+  socket.emit('connected', {
+    id: player.id, 
+    numUsers: numUsers,
+    world: {
+      width: WORLD_WIDTH,
+      height: WORLD_HEIGHT
+    }
+  });
+}
+
+
+function addRandomPlayer() {
+  var player = new Player(uuid.v4(), getNiceColor(), PLAYER_SIZE);
+  addPlayerToBoard(player);
+}
+
+
+function addPlayerToBoard(player){
+  var pos = Object.keys(users).length * PLAYER_SIZE + PLAYER_SIZE;
+  player.x = pos;
+  player.y = pos;
+  console .log("Place player on the board", player);
+
+    users[player.id] = player;
+  ++numUsers;
+
+}
+
+io.on('connection', function (socket) {  
+  //console.log(util.inspect(socket, false, 1));
+  clientConnected(socket);
+
+  // echo globally (all clients) that a person has connected
+  socket.broadcast.emit('user joined', {
+    userId: socket.userId,
+    numUsers: numUsers
+  });
+  console.log(socket.userId + " connected");
+
+
+  // when the user disconnects.. perform this
+  socket.on('disconnect', function () {
+    // remove the userId from global userIds list
+      console.log(socket.userId + " disconnected");
+      delete users[socket.userId];
+      --numUsers;
+
+      // echo globally that this client has left
+      socket.broadcast.emit('user left', {
+        userId: socket.userId,
+        numUsers: numUsers
+      });
+  });
+});
+
 
 
 function getNiceColor() {
@@ -43,51 +123,6 @@ function getNiceColor() {
     // '#a8f07a', '#4ae8c4', '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
   return niceColors[(Math.random() * niceColors.length)|0];
 }
-
-function clientConnected(socket) {
-  // we store the username in the socket session for this client
-  var username = getNiceColor();
-  socket.username = username;
-  // add the client's username to the global list
-  usernames[username] = username;
-  ++numUsers;
-  // console.log("Resp: " + util.inspect(resp, false, 1));
-  socket.emit('connected', {
-    id: username, 
-    numUsers: numUsers
-  });
-}
-
-io.on('connection', function (socket) {  
-  //console.log(util.inspect(socket, false, 1));
-  clientConnected(socket);
-
-  // echo globally (all clients) that a person has connected
-  socket.broadcast.emit('user joined', {
-    username: socket.username,
-    numUsers: numUsers
-  });
-  console.log(socket.username + " connected");
-
-
-  // when the user disconnects.. perform this
-  socket.on('disconnect', function () {
-    // remove the username from global usernames list
-    // if (addedUser) {
-      console.log(socket.username + " disconnected");
-      delete usernames[socket.username];
-      --numUsers;
-
-      // echo globally that this client has left
-      socket.broadcast.emit('user left', {
-        username: socket.username,
-        numUsers: numUsers
-      });
-    // }
-  });
-});
-
-
 
 
 var startLoop = function () {
