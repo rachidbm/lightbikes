@@ -8,13 +8,30 @@ var util = require('util');
 var uuid = require('uuid');
 var Player = require("./player.js");
 
-var TICK_TIME = 1000;  // ms to waith for each tick
-var WORLD_WIDTH = 640;
-var WORLD_HEIGHT = 480;
-var PLAYER_SIZE = 20;
+// Constants
+
+var C = {
+  WORLD: {
+    WIDTH: 640,
+    HEIGHT:480
+  },
+  PLAYER: {
+    SIZE: 20
+  },
+  DIRECTION: {
+    NOT_MOVING: 0,
+    NORTH: 1,
+    EAST: 2,
+    SOUTH: 3,
+    WEST: 4
+  },
+  TICK_TIME: 1000,  
+};
+
 
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
+  console.log("Settings; ", C);
 });
 
 // Routing
@@ -24,7 +41,6 @@ app.use(express.static(__dirname + '/public'));
 var users = {};
 var numUsers = 0;
 
-
 var prevMillis = 0;
 
 
@@ -32,7 +48,7 @@ var prevMillis = 0;
 // Main loop, will be called every 'X' time 
 function loop() {
   var d = new Date();
-  var deviation = (d.getTime() - prevMillis) - TICK_TIME;
+  var deviation = (d.getTime() - prevMillis) - C.TICK_TIME;
   // console.log("Looping deviation: " + deviation + " ms");
   prevMillis = d.getTime();
 
@@ -50,7 +66,7 @@ function clientConnected(socket) {
   // var pos = Object.keys(users).length * PLAYER_SIZE;
   // console.log("pos: ", pos)
 
-  var player = new Player(uuid.v4(), getNiceColor(), PLAYER_SIZE);
+  var player = new Player(uuid.v4(), getNiceColor(), C.PLAYER.SIZE);
   // console.log("Connected player: ", player);
   socket.userId = player.id;
 
@@ -62,23 +78,24 @@ function clientConnected(socket) {
     id: player.id, 
     numUsers: numUsers,
     world: {
-      width: WORLD_WIDTH,
-      height: WORLD_HEIGHT
+      width: C.WORLD.WIDTH,
+      height: C.WORLD.HEIGHT
     }
   });
 }
 
 
 function addRandomPlayer() {
-  var player = new Player(uuid.v4(), getNiceColor(), PLAYER_SIZE);
+  var player = new Player(uuid.v4(), getNiceColor(), C.PLAYER.SIZE);
   addPlayerToBoard(player);
 }
 
 
 function addPlayerToBoard(player){
-  var pos = Object.keys(users).length * PLAYER_SIZE + PLAYER_SIZE;
+  var pos = Object.keys(users).length * C.PLAYER.SIZE + C.PLAYER.SIZE;
   player.x = pos;
   player.y = pos;
+  player.direction = C.DIRECTION.EAST;
   console .log("Place player on the board", player);
 
     users[player.id] = player;
@@ -126,7 +143,7 @@ function getNiceColor() {
 
 
 var startLoop = function () {
-    setTimeout(startLoop, TICK_TIME);
+    setTimeout(startLoop, C.TICK_TIME);
     loop();
 }
 startLoop();

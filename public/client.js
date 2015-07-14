@@ -23,25 +23,13 @@ $(function() {
 
 
   function draw(players) {
-
-    // console.log(Object.keys(players));
-
     for (var id in players) {
       var p = players[id];
       drawRect(p.x, p.y, p.size, p.color);
     }
-    // var p = players[0]
-    // //get a reference to the canvas
-    // ctx.fillStyle = username;
-    // ctx.beginPath();
-    // // ctx.arc(75, 75, 10, 0, Math.PI*2, true); 
-    // ctx.rect(50, 50, size, size);
-    // ctx.closePath();
-    // ctx.fill();
   }
 
   function drawRect(x, y, size, color) {
-
       ctx.fillStyle = color;
       ctx.beginPath();
       ctx.rect(x, y, size, size);
