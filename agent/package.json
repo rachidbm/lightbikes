@@ -2,7 +2,7 @@
   "name": "lightbikes-agent",
   "version": "0.0.0",
   "description": "AI client for multiplayer lightbikes",
-  "main": "agent.js",
+  "main": "index.js",
   "author": "Rachid  Ben Moussa",
   "private": true,
   "license": "GPL",

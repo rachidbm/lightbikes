@@ -1,43 +1,17 @@
-var HOST = 'http://localhost:3000';
+module.exports = Agent;
 
-var io = require('socket.io-client');
-var socket = io(HOST); // Now we can open static HTML without having the nodejs server running
+function Agent(id) {
+  this.id = id;
+  this.tickCounter = 0;
+}
 
-var myId = null;
-
-function doStuff(data) {
-  var world = data.world;
-  if(world.paused) {
-    return;
-  }
+Agent.prototype.tick = function(world) { 
+  this.tickCounter++;
   var moved = false;
-  console.log("Move stuff?");
+  console.log("Calculate next step; ", this.id);
   if(moved) {
   // socket.emit("change direction", newDirection);
   }
   // var grid = world.grid;
+
 }
-
-
-
-socket.on('connected', function (data) {
-  myId = data.id;
-  console.log("Connected to server, got ID: ", myId);
-  console.log("I am: ", data.world.players[myId]);
-});
-
-socket.on("disconnect", function(){
-  console.log("disconnected from server");
-});
-
-socket.on('user joined', function (data) {
-  console.log(data.player + ' joined. ');
-});
-
-socket.on('user left', function (data) {
-  console.log(data.player + ' left. ');
-});
-
-socket.on('render', function (data) {
-  doStuff(data);
-});
