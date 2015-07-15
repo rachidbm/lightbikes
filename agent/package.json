@@ -1,8 +1,11 @@
 {
-  "name": "lightbikes-agent",
+  "name": "lightbikes-robot",
   "version": "0.1.0",
-  "description": "AI client for multiplayer lightbikes",
+  "description": "Robot client for multiplayer lightbikes",
   "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
   "author": "Rachid  Ben Moussa",
   "private": true,
   "license": "GPL",

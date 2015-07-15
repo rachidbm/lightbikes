@@ -4,6 +4,7 @@ $(function() {
   var $body = $('body');
   var $world = $('#world');
   var host = 'ws://localhost:3000';
+  // var host = 'ws://192.168.59.104:3000';
   
   console.log("Connecting to:", host);
   
