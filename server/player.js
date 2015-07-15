@@ -1,10 +1,10 @@
 module.exports = Player;
 
-var C = require("./config");
+var C = require("../config");
 
 function Player(id, color, size, x, y) {
 	this.id = id;
-  this.color = color;
+	this.color = color;
 	this.size = size;
 	this.x = x;
 	this.y = y;
@@ -17,7 +17,7 @@ Player.prototype.isAlive = function() {
 	return this.alive;
 }
 Player.prototype.die = function() { 
-	console.log(this.id + " dies ");
+	console.log(this.id + " died");
 	this.alive = false;
 }
 
@@ -56,16 +56,16 @@ Player.prototype.move = function() {
 	switch(this.direction) {
 	case C.DIRECTION.UP:
 		this.y -= step;
-	    break;
+    break;
 	case C.DIRECTION.RIGHT:
 		this.x += step;
-	    break;
+    break;
 	case C.DIRECTION.DOWN:
 		this.y += step;
-	    break;
+    break;
 	case C.DIRECTION.LEFT:
 		this.x -= step;
-	    break;
+    break;
 	}	
 };
 

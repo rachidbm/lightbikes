@@ -40,7 +40,7 @@ World.prototype.movePlayers = function(player) {
 
 	for (var id in this.players) {
 		var p = this.players[id];
-		if(!p.isAlive()) {
+		if(!p.alive) {
 			continue;
 		}
 		p.move();
