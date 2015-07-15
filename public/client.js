@@ -8,17 +8,29 @@ $(function() {
 
 
   function setupWorld(world) {
-    console.log("Setup world: ", world);
+    console.log("Setup world: ", Object.keys(world), world);
     ctx.canvas.width = world.width;
     ctx.canvas.height = world.height;
   }
 
 
-  function draw(world) {
-    for (var id in world.players) {
-      var p = world.players[id];
-      drawRect(p.x, p.y, p.size, p.color);
+  function draw(data) {
+    var world = data.world;
+    var grid = world.grid;
+    for(var x = 0; x < world.tiles_width; x++) {
+      for(var y = 0; y < world.tiles_height; y++) {
+        if(grid[x][y] != null) {
+          // console.log("nonu: ", grid[x][y]);
+          drawRect(x * world.tileSize, y * world.tileSize, world.tileSize, grid[x][y])
+        }
+      }
     }
+
+    // for (var id in world.players) {
+    //   var p = world.players[id];
+    //   drawRect(p.x, p.y, p.size, p.color);
+    // }
+    logClients(data);
   }
 
   function drawRect(x, y, size, color) {
@@ -31,7 +43,11 @@ $(function() {
 
 
   function logClients (data) {
-    $logArea.text("clients: " + data.totalPlayers);
+    var msg = "clients: " + data.totalPlayers;
+    if(data.world.paused) {
+      msg += "   (paused)"
+    }
+    $logArea.text(msg);
   }
 
 
@@ -74,23 +90,23 @@ $(function() {
     connected = true;
     setupWorld(data.world);
 
-    logClients(data);
-    draw(data.world);
+    // logClients(data);
+    draw(data);
   });
 
   socket.on('user joined', function (data) {
-    console.log(data.player + ' joined, ', data);
-    logClients(data);
+    // console.log(data.player + ' joined, ', data);
+    // logClients(data);
   });
 
   socket.on('user left', function (data) {
-    console.log(data.player + ' left. ', data);
-    logClients(data);
+    // console.log(data.player + ' left. ', data);
+    // logClients(data);
   });
 
   socket.on('draw', function (data) {
     console.log("draw: ", data);
-    draw(data.world);
+    draw(data);
   });
 
 

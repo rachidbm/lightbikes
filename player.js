@@ -13,6 +13,16 @@ function Player(id, color, size, x, y) {
 	this.x = x;
 	this.y = y;
 	this.direction = 0;
+	this.alive = true;
+}
+
+
+Player.prototype.isAlive = function() { 
+	return this.alive;
+}
+Player.prototype.die = function() { 
+	console.log(this.id + " dies, ", this);
+	this.alive = false;
 }
 
 Player.prototype.up = function() { 
@@ -39,13 +49,15 @@ Player.prototype.left = function() {
 	}
 };
 
-Player.prototype.changeDirection = function() { 
-	changeDirection
-}
 
 
 Player.prototype.move = function() { 
-	var step = this.size/2;
+	if(!this.alive) {
+		return;
+	}
+
+	// var step = this.size;
+	var step = 1;
 	switch(this.direction) {
 	case DIRECTION.UP:
 		this.y -= step;

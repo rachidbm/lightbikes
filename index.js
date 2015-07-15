@@ -31,7 +31,7 @@ var World = require("./world.js");
 
 var users = {};
 // var totalUsers = 0;
-var world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT);
+var world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE);
 
 // Routing
 app.use(express.static(__dirname + '/public'));
@@ -51,7 +51,7 @@ function loop() {
   world.movePlayers();
 
   io.emit('draw', {
-    players: world.players, 
+    
     totalPlayers: world.getTotalPlayers(),
     world: world
   });
@@ -62,10 +62,8 @@ function clientConnected(socket) {
   var player = new Player(uuid.v4(), getNiceColor(), C.PLAYER.SIZE);
   socket.userId = player.id;
 
-  world.addPlayerToBoard(player);
-  // addRandomPlayer();
+  world.addPlayer(player);
 
-  // console.log("Resp: " + util.inspect(resp, false, 1));
   socket.emit('connected', {
     id: player.id, 
     totalPlayers: world.getTotalPlayers(),
@@ -79,7 +77,6 @@ io.on('connection', function (socket) {
   clientConnected(socket);
   console.log(socket.userId + " connected");
 
-  // echo globally (all clients) that a person has connected
   socket.broadcast.emit('user joined', {
     player: socket.userId,
     totalPlayers: world.getTotalPlayers(),
@@ -93,7 +90,6 @@ io.on('connection', function (socket) {
 
   socket.on('change direction', function (newDirection) {
     var p = world.players[socket.userId];
-    // console.log("change direction: " + newDirection + " for player: ", player.id);
     switch(newDirection) {
     case 37: // LEFT
       p.left();
