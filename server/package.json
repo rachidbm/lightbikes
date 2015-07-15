@@ -1,7 +1,7 @@
 {
-  "name": "lightbikes-server",
+  "name": "lightbikes",
   "version": "0.0.0",
-  "description": "Server for Multiplayer lightbikes",
+  "description": "Multiplayer lightbikes",
   "main": "server.js",
   "author": "Rachid  Ben Moussa",
   "private": true,
