@@ -34,7 +34,6 @@ function loop() {
   world.movePlayers();
 
   io.emit('draw', {
-    
     totalPlayers: world.getTotalPlayers(),
     world: world
   });

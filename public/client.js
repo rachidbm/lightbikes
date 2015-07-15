@@ -1,7 +1,8 @@
 $(function() {
   var $window = $(window);
   var $logArea = $('.logArea'); // Char area
-  var connected = false;
+  var $body = $('body');
+  var isConnected = false;
 
   var socket = io();
   var ctx = $('#world')[0].getContext("2d");
@@ -30,7 +31,7 @@ $(function() {
     //   var p = world.players[id];
     //   drawRect(p.x, p.y, p.size, p.color);
     // }
-    logClients(data);
+    
   }
 
   function drawRect(x, y, size, color) {
@@ -42,10 +43,12 @@ $(function() {
   }
 
 
-  function logClients (data) {
+  function logClients(data) {
     var msg = "clients: " + data.totalPlayers;
+    //var strConnected = isConnected ? " connected" : " disconnected";
+    //console.log(isConnected);
     if(data.world.paused) {
-      msg += "   (paused)"
+      msg += "   (paused) ";
     }
     $logArea.text(msg);
   }
@@ -83,14 +86,28 @@ $(function() {
 
   });
 
+  function setConnected(connected) {
+    isConnected = connected;
+    if(isConnected) {
+      $body.css("background-color", "#F6FAFC");
+    } else {
+      $body.css("background-color", "#FFBFB7");
+    }
+  }
+  
 
   socket.on('connected', function (data) {
     console.log("Connected to server, got ID: ", data.id);
     console.log("data: ", data);
-    connected = true;
+    setConnected(true);
     setupWorld(data.world);
     // logClients(data);
     draw(data);
+  });
+
+  socket.on("disconnect", function(){
+    console.log("disconnected from server");
+    setConnected(false);
   });
 
   socket.on('user joined', function (data) {
@@ -106,6 +123,7 @@ $(function() {
   socket.on('draw', function (data) {
     // console.log("draw: ", data);
     draw(data);
+    logClients(data);
   });
 
 
