@@ -7,9 +7,14 @@ var socket = io(HOST); // Now we can open static HTML without having the nodejs 
 var agent = null;
 
 
+function directionChangedCallback(newDirection) {
+	console.log("emit change direction", newDirection);
+	socket.emit("change direction", newDirection);
+}
+
 socket.on('connected', function (data) {
   console.log("Connected to server, got ID: ", data.id);
-  agent = new Agent(data.id);
+  agent = new Agent(data.id, directionChangedCallback);
   console.log("I am: ", data.world.players[data.id]);
 });
 
