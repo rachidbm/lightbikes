@@ -1,7 +1,8 @@
-var HOST = 'http://localhost:3000';
+var HOST = 'ws://localhost:3000';
 
 var io = require('socket.io-client');
 var Agent = require('./agent.js');
+console.log("Connecting to:", HOST);
 var socket = io(HOST); // Now we can open static HTML without having the nodejs server running
 
 var agent = null;

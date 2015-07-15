@@ -1,9 +1,10 @@
-## Lightbikes
+# Lightbikes
 Classig arcade game running in the Browser
 
-
-## Installation
+# Running the server
+Install npm (node package manager). 
 ```
-$ npm install
-$ node .
+cd server
+npm install
+node .
 ```

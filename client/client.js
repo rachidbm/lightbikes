@@ -3,9 +3,12 @@ $(function() {
   var $logArea = $('.logArea');
   var $body = $('body');
   var $world = $('#world');
-
+  var host = 'ws://localhost:3000';
+  
+  console.log("Connecting to:", host);
+  
   // var socket = io();   // Connects to URL where client is hosted.
-  var socket = io('http://localhost:3000'); // Now we can open static HTML without having the nodejs server running
+  var socket = io(host); // Now we can open static HTML without having the nodejs server running
   
   var ctx = $world[0].getContext("2d");
   var worldBackgroundColor = $('#world').css('backgroundColor');
