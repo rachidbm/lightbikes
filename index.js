@@ -15,7 +15,7 @@ var users = {};
 var world;
 
 // Routing
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/client'));
 
 // Startup 
 server.listen(port, function () {
