@@ -89,7 +89,6 @@ $(function() {
     console.log("data: ", data);
     connected = true;
     setupWorld(data.world);
-
     // logClients(data);
     draw(data);
   });

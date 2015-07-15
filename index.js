@@ -30,8 +30,7 @@ var Player = require("./player.js");
 var World = require("./world.js");
 
 var users = {};
-// var totalUsers = 0;
-var world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE);
+var world;
 
 // Routing
 app.use(express.static(__dirname + '/public'));
@@ -41,6 +40,7 @@ server.listen(port, function () {
   console.log('Example app listening at http://%s:%s', host, port);
   console.log('Server listening at port %d', port);
   console.log("Settings; ", C);
+  world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE);
   startLoop();
 });
 
@@ -59,10 +59,8 @@ function loop() {
 
 
 function clientConnected(socket) {
-  var player = new Player(uuid.v4(), getNiceColor(), C.PLAYER.SIZE);
+  var player = world.createPlayer();
   socket.userId = player.id;
-
-  world.addPlayer(player);
 
   socket.emit('connected', {
     id: player.id, 
@@ -120,16 +118,6 @@ io.on('connection', function (socket) {
 
 });
 
-
-
-function getNiceColor() {
-  var niceColors = ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', 
-      '#d62728', '#ff9896', '#9467bd', '#c5b0d5',  '#8c564b', '#c49c94', '#e377c2', 
-      '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22',  '#dbdb8d', '#17becf', '#9edae5'];
-    // '#e21400', '#91580f', '#f8a700', '#f78b00', '#58dc00', '#287b00', 
-    // '#a8f07a', '#4ae8c4', '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
-  return niceColors[(Math.random() * niceColors.length)|0];
-}
 
 var prevMillis = 0;
 function logLoop() {
