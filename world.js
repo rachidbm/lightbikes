@@ -27,7 +27,6 @@ function World(width, height, tileSize) {
 		}
 	}
 	console.log("Created world of", this.tiles_width, "x", this.tiles_height, "tiles");
-
 }
 
 
@@ -54,7 +53,7 @@ World.prototype.movePlayers = function(player) {
 }
 
 World.prototype.createPlayer = function() {
-	var player = new Player(uuid.v4(), getNiceColor(), this.tileSize);
+	var player = new Player(uuid.v4(), getNextColor(), this.tileSize);
 	this.addPlayer(player);
 	return player;
 }
@@ -89,14 +88,17 @@ function addRandomPlayer() {
 
 
 
-function getNiceColor() {
-  var niceColors = ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', 
-      '#d62728', '#ff9896', '#9467bd', '#c5b0d5',  '#8c564b', '#c49c94', '#e377c2', 
-      '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22',  '#dbdb8d', '#17becf', '#9edae5'];
-    // '#e21400', '#91580f', '#f8a700', '#f78b00', '#58dc00', '#287b00', 
-    // '#a8f07a', '#4ae8c4', '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
-  return niceColors[(Math.random() * niceColors.length)|0];
+var COLORS = [
+			'#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', 
+	    '#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', 
+	    '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5',
+      '#e21400', '#91580f', '#f8a700', '#f78b00', '#58dc00', '#287b00', 
+     	'#a8f07a', '#4ae8c4', '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
+    ];
+var currentColorIndex = 0;
+function getNextColor() {
+	currentColorIndex ++;
+	return COLORS[currentColorIndex % COLORS.length];
 }
-
 
 module.exports = World;
