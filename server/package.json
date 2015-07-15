@@ -1,6 +1,6 @@
 {
   "name": "lightbikes",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Multiplayer lightbikes",
   "main": "server.js",
   "author": "Rachid  Ben Moussa",
