@@ -64,20 +64,40 @@ World.prototype.createPlayer = function() {
 }
 
 World.prototype.addPlayer = function(player) {
-	player.direction = 3; //  + (this.getTotalPlayers() % 3);
-
-	while(true) {
-	  player.x = Math.floor((Math.random() * 10 * this.tiles_width) % this.tiles_width);
-	  player.y = Math.floor((Math.random() * 10 * this.tiles_height) % this.tiles_height);
-	  if(this.grid[player.x][player.y] != null) {
-	  	// This spot is already taken, try again...
-	  	continue;
-	  }
-	  console.log("Placed player", player.id, "@", player.x, player.y);
+	// Initial direction is random
+	player.direction  = Math.floor((Math.random() * 4)) + 1;
+	position = this.randomEmptyPosition();
+	if(position != null) {
+		player.x = position.x;
+		player.y = position.y;
 	  this.grid[player.x][player.y] = player.color;
 	  this.players[player.id] = player;
-	  break;
+	 }
+}
+
+
+World.prototype.randomEmptyPosition = function() {
+	var x, y;
+	var attemptsLeft = this.tiles_width * this.tiles_height;
+	while(true) {
+		if(attemptsLeft < 1) {
+			console.log("Player can not be added. World is over crowded! ");
+			break;
+		}
+	  x = Math.floor(Math.random() * this.tiles_width);
+	  y = Math.floor(Math.random() * this.tiles_height);
+	  if(this.grid[x][y] != null) {
+	  	// This spot is already taken, try again...
+	  	attemptsLeft--;
+	  	continue;
+	  } else {
+		  return {
+		    x: x,
+		    y: y
+		  }
+	  }
 	}
+	return null;
 }
 
 World.prototype.getTotalPlayers = function(player) {

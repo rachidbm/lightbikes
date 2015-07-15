@@ -4,7 +4,7 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
-var host = process.env.HOST || '*';
+var host = process.env.HOST || 'localhost';
 var util = require('util');
 var uuid = require('uuid');
 var Player = require("./player.js");
@@ -19,7 +19,7 @@ app.use(express.static(__dirname + '/../client'));
 
 // Startup 
 server.listen(port, function () {
-  console.log('Server listening at http://%s:%s', host, port);
+  console.log('Server listening at %s:%s', host, port);
   console.log("Settings; ", C);
   world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE);
   startLoop();

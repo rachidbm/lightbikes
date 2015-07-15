@@ -12,10 +12,6 @@ function Player(id, color, size, x, y) {
 	this.alive = true;
 }
 
-
-Player.prototype.isAlive = function() { 
-	return this.alive;
-}
 Player.prototype.die = function() { 
 	console.log(this.id + " died");
 	this.alive = false;
