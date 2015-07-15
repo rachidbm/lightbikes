@@ -15,16 +15,14 @@ var users = {};
 var world;
 
 // Routing
-app.use(express.static(__dirname + '/client'));
+app.use(express.static(__dirname + '/../client'));
 
 // Startup 
 server.listen(port, function () {
-  console.log('Example app listening at http://%s:%s', host, port);
-  console.log('Server listening at port %d', port);
+  console.log('Server listening at http://%s:%s', host, port);
   console.log("Settings; ", C);
   world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE);
   startLoop();
-  console.log("config: ", C);
 });
 
 
