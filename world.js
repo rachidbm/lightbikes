@@ -40,6 +40,9 @@ World.prototype.movePlayers = function(player) {
 			if(p.x < 0 || p.y < 0 || p.x >= this.grid.length || p.y >= this.grid[p.x].length) {
 				// Player collide with wall!
 				p.die();
+			} else if(this.grid[p.x][p.y] != null){
+				// Someone was already here
+				p.die();
 			} else {
 				// Set player to new position on grid
 				this.grid[p.x][p.y] = p.color;
@@ -50,14 +53,11 @@ World.prototype.movePlayers = function(player) {
 
 World.prototype.addPlayer = function(player) {
 	player.direction = 3; //  + (this.getTotalPlayers() % 3);
+  player.x = Math.floor((Math.random() * 10 * this.tiles_width) % this.tiles_width);
+  player.y = Math.floor((Math.random() * 10 * this.tiles_height) % this.tiles_height);
 
-  // var pos = this.grid.length / 8;
-  var pos = 2;
-  this.grid[pos][pos] = player.color;
-
-  player.x = pos;
-  player.y = pos;
-  
+  console.log("New player @", player.x, player.y);
+  this.grid[player.x][player.y] = player.color;
   this.players[player.id] = player;
 }
 

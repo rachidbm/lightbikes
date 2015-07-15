@@ -21,7 +21,7 @@ Player.prototype.isAlive = function() {
 	return this.alive;
 }
 Player.prototype.die = function() { 
-	console.log(this.id + " dies, ", this);
+	console.log(this.id + " dies ");
 	this.alive = false;
 }
 

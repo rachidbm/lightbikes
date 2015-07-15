@@ -105,7 +105,7 @@ $(function() {
   });
 
   socket.on('draw', function (data) {
-    console.log("draw: ", data);
+    // console.log("draw: ", data);
     draw(data);
   });
 
