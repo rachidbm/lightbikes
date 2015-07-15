@@ -7,7 +7,7 @@ function Agent(id, directionChangedCallback) {
   this.id = id;
   this.tickCounter = 0;
   this.actionSpeed = 1; // Every 'x' ticks this Agent does something
-  this.directionChangedCallback = directionChangedCallback;
+  this.directionChanged = directionChangedCallback;
 }
 
 Agent.prototype.tick = function(world) { 
@@ -25,16 +25,15 @@ Agent.prototype.tick = function(world) {
   var newDirection = this.calcNextDirection(world, player);
 
   if(currentDirection != newDirection) {
-    console.log("change direction from", currentDirection, "to", newDirection);
-    this.directionChangedCallback(newDirection);
+    this.directionChanged(newDirection);
   }
 }
 
 Agent.prototype.calcNextDirection = function(world, player) { 
   var nextPos = calcNextPosition(player);
-  // console.log("Calc next Direction, next position: ", nextPos);
+
+  // Prevent colliding to the border
   if(nextPos.x <= 0) {
-    // move up or down
     return C.DIRECTION.UP;
   } else if(nextPos.y <= 0) {
     return C.DIRECTION.RIGHT;
@@ -42,9 +41,31 @@ Agent.prototype.calcNextDirection = function(world, player) {
     return C.DIRECTION.DOWN;
   } else if(nextPos.y >= world.grid[nextPos.x].length-1) {
     return C.DIRECTION.LEFT;
+  } 
+
+  if(world.grid[nextPos.x][nextPos.y] != null) {
+    // Someone was here!
+    console.log("old: ", player.direction, "new: ", turnRight(player))
+    return turnRight(player);
   }
-    // p.x >= this.grid.length || p.y >= this.grid[p.x].length) {
+
   return player.direction;
+}
+
+// Return direction when player turns right
+function turnRight(player) {
+  if((player.direction) + 1 > 4) {
+    return 1;
+  }
+  return player.direction + 1;
+}
+
+// Return direction when player turns left
+function turnLeft(player) {
+  if((player.direction) - 1 < 0) {
+    return 4;
+  }
+  return player.direction - 1;
 }
 
 

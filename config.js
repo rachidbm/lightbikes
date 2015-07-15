@@ -1,7 +1,7 @@
 var CONFIG = {
   WORLD: {
-	  WIDTH: 200,
-	  HEIGHT: 200
+    WIDTH: 900,
+    HEIGHT: 550
 	},
   PLAYER: {
     SIZE: 10
