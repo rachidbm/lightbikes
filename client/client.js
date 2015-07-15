@@ -3,9 +3,11 @@ $(function() {
   var $logArea = $('.logArea'); // Char area
   var $body = $('body');
 
-  var socket = io();
+  // var socket = io();   // Connects to URL where client is hosted.
+  var socket = io('http://localhost:3000'); // Now we can open static HTML without having the nodejs server running
   var ctx = $('#world')[0].getContext("2d");
 
+  showConnectionStatus();
 
   function setupWorld(world) {
     console.log("Setup world: ", Object.keys(world), world);
@@ -81,7 +83,7 @@ $(function() {
     if(socket.connected) {
       $body.css("background-color", "#F6FAFC");
     } else {
-      $body.css("background-color", "#FFBFB7");
+      $body.css("background-color", "#FFD9D9");
     }
   }
   
