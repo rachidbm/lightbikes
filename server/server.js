@@ -28,9 +28,9 @@ server.listen(port, function () {
 
 // Main loop, will be called every 'X' time, see startLoop()
 function loop() {
-  if(world.paused) {
-    return;
-  }
+  // if(world.paused) {
+  //   return;
+  // }
 
   world.movePlayers();
   io.emit('render', {
@@ -55,7 +55,6 @@ function clientConnected(socket) {
 io.on('connection', function (socket) {  
 
   clientConnected(socket);
-  console.log(socket.userId + " connected");
 
   socket.broadcast.emit('user joined', {
     player: socket.userId,

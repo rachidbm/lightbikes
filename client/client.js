@@ -16,6 +16,7 @@ $(function() {
     console.log("Setup world: ", Object.keys(world), world);
     ctx.canvas.width = world.width;
     ctx.canvas.height = world.height;
+    render(world);
   }
 
 

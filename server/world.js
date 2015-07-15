@@ -65,12 +65,19 @@ World.prototype.createPlayer = function() {
 
 World.prototype.addPlayer = function(player) {
 	player.direction = 3; //  + (this.getTotalPlayers() % 3);
-  player.x = Math.floor((Math.random() * 10 * this.tiles_width) % this.tiles_width);
-  player.y = Math.floor((Math.random() * 10 * this.tiles_height) % this.tiles_height);
 
-  console.log("Placed player @", player.x, player.y);
-  this.grid[player.x][player.y] = player.color;
-  this.players[player.id] = player;
+	while(true) {
+	  player.x = Math.floor((Math.random() * 10 * this.tiles_width) % this.tiles_width);
+	  player.y = Math.floor((Math.random() * 10 * this.tiles_height) % this.tiles_height);
+	  if(this.grid[player.x][player.y] != null) {
+	  	// This spot is already taken, try again...
+	  	continue;
+	  }
+	  console.log("Placed player", player.id, "@", player.x, player.y);
+	  this.grid[player.x][player.y] = player.color;
+	  this.players[player.id] = player;
+	  break;
+	}
 }
 
 World.prototype.getTotalPlayers = function(player) {
