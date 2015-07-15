@@ -1,23 +1,4 @@
-// Constants
-var C = {
-  WORLD: {
-    WIDTH: 640,
-    HEIGHT:480
-  },
-  PLAYER: {
-    SIZE: 10
-  },
-  DIRECTION: {
-    NOT_MOVING: 0,
-    UP: 1,
-    RIGHT: 2,
-    DOWN: 3,
-    LEFT: 4
-  },
-  TICK_TIME: 100,
-};
 
-// Setup basic express server
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
@@ -28,6 +9,7 @@ var util = require('util');
 var uuid = require('uuid');
 var Player = require("./player.js");
 var World = require("./world.js");
+var C = require("./config");
 
 var users = {};
 var world;
@@ -42,6 +24,7 @@ server.listen(port, function () {
   console.log("Settings; ", C);
   world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE);
   startLoop();
+  console.log("config: ", C);
 });
 
 
@@ -80,7 +63,6 @@ io.on('connection', function (socket) {
     totalPlayers: world.getTotalPlayers(),
     world: world
   });
-
 
   socket.on('toggle pause', function (newDirection) {
     world.togglePause();

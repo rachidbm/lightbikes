@@ -1,10 +1,6 @@
-var DIRECTION = {
-	NOT_MOVING: 0,
-	UP: 1,
-	RIGHT: 2,
-	DOWN: 3,
-	LEFT: 4
-}
+module.exports = Player;
+
+var C = require("./config");
 
 function Player(id, color, size, x, y) {
 	this.id = id;
@@ -26,29 +22,28 @@ Player.prototype.die = function() {
 }
 
 Player.prototype.up = function() { 
-	if(this.direction != DIRECTION.DOWN) {
-		this.direction = DIRECTION.UP;
+	if(this.direction != C.DIRECTION.DOWN) {
+		this.direction = C.DIRECTION.UP;
 	}
 };
 
 Player.prototype.right = function() { 
-	if(this.direction != DIRECTION.LEFT) {
-		this.direction = DIRECTION.RIGHT;
+	if(this.direction != C.DIRECTION.LEFT) {
+		this.direction = C.DIRECTION.RIGHT;
 	}
 };
 
 Player.prototype.down = function() { 
-	if(this.direction != DIRECTION.UP) {
-		this.direction = DIRECTION.DOWN;
+	if(this.direction != C.DIRECTION.UP) {
+		this.direction = C.DIRECTION.DOWN;
 	}
 };
 
 Player.prototype.left = function() { 
-	if(this.direction != DIRECTION.RIGHT) {
-		this.direction = DIRECTION.LEFT;
+	if(this.direction != C.DIRECTION.RIGHT) {
+		this.direction = C.DIRECTION.LEFT;
 	}
 };
-
 
 
 Player.prototype.move = function() { 
@@ -59,20 +54,19 @@ Player.prototype.move = function() {
 	// var step = this.size;
 	var step = 1;
 	switch(this.direction) {
-	case DIRECTION.UP:
+	case C.DIRECTION.UP:
 		this.y -= step;
 	    break;
-	case DIRECTION.RIGHT:
+	case C.DIRECTION.RIGHT:
 		this.x += step;
 	    break;
-	case DIRECTION.DOWN:
+	case C.DIRECTION.DOWN:
 		this.y += step;
 	    break;
-	case DIRECTION.LEFT:
+	case C.DIRECTION.LEFT:
 		this.x -= step;
 	    break;
 	}	
 };
 
 
-module.exports = Player;

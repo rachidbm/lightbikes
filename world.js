@@ -1,5 +1,8 @@
+module.exports = World;
+
 var uuid = require('uuid');
 var Player = require("./player.js");
+
 
 function World(width, height, tileSize) {
 	this.width = width;
@@ -101,4 +104,3 @@ function getNextColor() {
 	return COLORS[currentColorIndex % COLORS.length];
 }
 
-module.exports = World;
