@@ -1,17 +1,9 @@
 var io = require('socket.io-client');
 var Agent = require('./agent.js');
 
-//var port = process.env.PORT || 3000;
-//var host = process.env.HOST || 'localhost';
-// var host = process.env.HOST || 'localhost:3000';
-var host = 'ws://192.168.59.104:3000';
-
-console.log("env.HOST:", process.env.HOST);
-
-// var host = 'ws://localhost:3000';
-//var host = 'ws://192.168.59.104:3000';
-
+var host = process.env.HOST || 'ws://localhost:3000';
 console.log("Connecting to:", host);
+
 var socket = io(host); // Now we can open static HTML without having the nodejs server running
 
 var agent = null;
