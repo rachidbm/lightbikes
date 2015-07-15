@@ -65,15 +65,20 @@ $(function() {
 
     var newDirection = 0;
     switch(event.keyCode) {
-
     case 32: // SPACE
       socket.emit("toggle pause", newDirection);
       break;
     case 37: // LEFT
+      newDirection = 4;
+      break;
     case 38: // UP
+      newDirection = 1;
+      break;
     case 39: // RIGHT 
+      newDirection = 2;
+      break;    
     case 40: // DOWN
-      newDirection = event.keyCode;
+      newDirection = 3;
       break;
     }
     if(newDirection > 0) {

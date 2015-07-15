@@ -69,16 +69,16 @@ io.on('connection', function (socket) {
   socket.on('change direction', function (newDirection) {
     var p = world.players[socket.userId];
     switch(newDirection) {
-    case 37: // LEFT
+    case C.DIRECTION.LEFT:
       p.left();
       break;
-    case 38: // UP
+    case C.DIRECTION.UP:
       p.up();
       break;
-    case 39: // RIGHT 
+    case C.DIRECTION.RIGHT:
       p.right();
       break;
-    case 40: // DOWN
+    case C.DIRECTION.DOWN:
       p.down();
       break;
     }
