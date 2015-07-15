@@ -1,6 +1,6 @@
 module.exports = Player;
 
-var C = require("../config");
+var C = require("./config");
 
 function Player(id, color, size, x, y) {
 	this.id = id;

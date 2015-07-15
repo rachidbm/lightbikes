@@ -1,6 +1,6 @@
 module.exports = Agent;
 
-var C = require("../config");
+var C = require("./config");
 
 
 function Agent(id, directionChangedCallback) {
@@ -45,7 +45,6 @@ Agent.prototype.calcNextDirection = function(world, player) {
 
   if(world.grid[nextPos.x][nextPos.y] != null) {
     // Someone was here!
-    console.log("old: ", player.direction, "new: ", turnRight(player))
     return turnRight(player);
   }
 

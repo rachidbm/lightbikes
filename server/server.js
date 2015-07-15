@@ -9,7 +9,7 @@ var util = require('util');
 var uuid = require('uuid');
 var Player = require("./player.js");
 var World = require("./world.js");
-var C = require("../config");
+var C = require("./config");
 
 var users = {};
 var world;
