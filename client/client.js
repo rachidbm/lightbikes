@@ -1,11 +1,14 @@
 $(function() {
   var $window = $(window);
-  var $logArea = $('.logArea'); // Char area
+  var $logArea = $('.logArea');
   var $body = $('body');
+  var $world = $('#world');
 
   // var socket = io();   // Connects to URL where client is hosted.
   var socket = io('http://localhost:3000'); // Now we can open static HTML without having the nodejs server running
-  var ctx = $('#world')[0].getContext("2d");
+  
+  var ctx = $world[0].getContext("2d");
+  var worldBackgroundColor = $('#world').css('backgroundColor');
 
   showConnectionStatus();
 
@@ -16,25 +19,26 @@ $(function() {
   }
 
 
-  function draw(data) {
-    var world = data.world;
+  function render(world) {
     var grid = world.grid;
     for(var x = 0; x < world.tiles_width; x++) {
       for(var y = 0; y < world.tiles_height; y++) {
         if(grid[x][y] != null) {
-          // console.log("nonu: ", grid[x][y]);
           drawRect(x * world.tileSize, y * world.tileSize, world.tileSize, grid[x][y])
+        } else {
+          drawRect(x * world.tileSize, y * world.tileSize, world.tileSize, worldBackgroundColor);
         }
       }
     }
   }
 
+
   function drawRect(x, y, size, color) {
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.rect(x, y, size, size);
-      ctx.closePath();
-      ctx.fill();      
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.rect(x, y, size, size);
+    ctx.closePath();
+    ctx.fill();      
   }
 
 
@@ -91,10 +95,11 @@ $(function() {
   socket.on('connected', function (data) {
     console.log("Connected to server, got ID: ", data.id);
     showConnectionStatus();
-    console.log("data: ", data);
+    // console.log("data: ", data);
+    console.log("I am: ", data.world.players[data.id]);
     setupWorld(data.world);
     // logClients(data);
-    draw(data);
+    // render(data);
   });
 
   socket.on("disconnect", function(){
@@ -112,9 +117,9 @@ $(function() {
     // logClients(data);
   });
 
-  socket.on('draw', function (data) {
-    // console.log("draw: ", data);
-    draw(data);
+  socket.on('render', function (data) {
+    // console.log("render: ", data);
+    render(data.world);
     logClients(data);
   });
 

@@ -31,7 +31,7 @@ function loop() {
   // logLoop();
   world.movePlayers();
 
-  io.emit('draw', {
+  io.emit('render', {
     totalPlayers: world.getTotalPlayers(),
     world: world
   });
