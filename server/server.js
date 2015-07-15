@@ -26,11 +26,13 @@ server.listen(port, function () {
 });
 
 
-// Main loop, will be called every 'X' time 
+// Main loop, will be called every 'X' time, see startLoop()
 function loop() {
-  // logLoop();
-  world.movePlayers();
+  if(world.paused) {
+    return;
+  }
 
+  world.movePlayers();
   io.emit('render', {
     totalPlayers: world.getTotalPlayers(),
     world: world
@@ -96,15 +98,6 @@ io.on('connection', function (socket) {
   });
 
 });
-
-
-var prevMillis = 0;
-function logLoop() {
-  var d = new Date();
-  var deviation = (d.getTime() - prevMillis) - C.TICK_TIME;
-  console.log("Looping deviation: " + deviation + " ms");
-  prevMillis = d.getTime();
-}
 
 
 var startLoop = function () {

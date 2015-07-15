@@ -34,23 +34,25 @@ function World(width, height, tileSize) {
 
 
 World.prototype.movePlayers = function(player) {
-	if(!this.paused) {
-		for (var id in this.players) {
-			var p = this.players[id];
-			if(!p.isAlive()) {
-				continue;
-			}
-			p.move();
-			if(p.x < 0 || p.y < 0 || p.x >= this.grid.length || p.y >= this.grid[p.x].length) {
-				// Player collide with wall!
-				p.die();
-			} else if(this.grid[p.x][p.y] != null){
-				// Someone was already here
-				p.die();
-			} else {
-				// Set player to new position on grid
-				this.grid[p.x][p.y] = p.color;
-			}
+	if(this.paused) {
+		return;
+	}
+
+	for (var id in this.players) {
+		var p = this.players[id];
+		if(!p.isAlive()) {
+			continue;
+		}
+		p.move();
+		if(p.x < 0 || p.y < 0 || p.x >= this.grid.length || p.y >= this.grid[p.x].length) {
+			// Player collide with wall!
+			p.die();
+		} else if(this.grid[p.x][p.y] != null){
+			// Someone was already here
+			p.die();
+		} else {
+			// Set player to new position on grid
+			this.grid[p.x][p.y] = p.color;
 		}
 	}
 }
