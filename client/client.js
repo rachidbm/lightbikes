@@ -69,8 +69,11 @@ $(function() {
 
     var newDirection = 0;
     switch(event.keyCode) {
+    case 82: // r
+      socket.emit("restart");
+      break;
     case 32: // SPACE
-      socket.emit("toggle pause", newDirection);
+      socket.emit("toggle pause");
       break;
     case 37: // LEFT
       newDirection = 4;

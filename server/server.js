@@ -11,7 +11,6 @@ var Player = require("./player.js");
 var World = require("./world.js");
 var C = require("./config");
 
-var users = {};
 var world;
 
 // Routing
@@ -28,10 +27,6 @@ server.listen(port, function () {
 
 // Main loop, will be called every 'X' time, see startLoop()
 function loop() {
-  // if(world.paused) {
-  //   return;
-  // }
-
   world.movePlayers();
   io.emit('render', {
     totalPlayers: world.getTotalPlayers(),
@@ -62,7 +57,11 @@ io.on('connection', function (socket) {
     world: world
   });
 
-  socket.on('toggle pause', function (newDirection) {
+  socket.on('restart', function () {
+    world.restart();
+  });
+
+  socket.on('toggle pause', function () {
     world.togglePause();
   });
 

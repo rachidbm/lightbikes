@@ -8,3 +8,13 @@ cd server
 npm install
 node .
 ```
+# Client
+Open index.html in a Browser
+
+# Robots
+Running a robot
+```
+cd agent
+npm install
+node .
+```

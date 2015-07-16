@@ -22,16 +22,42 @@ function World(width, height, tileSize) {
 
 	this.grid = new Array([this.tiles_width]); 
 
-	// init empty grid
+	this.resetGrid();
+}
+
+World.prototype.resetGrid = function() {
+	console.log("Reset Grid");
 	for(var x = 0; x < this.tiles_width; x++) {
 		this.grid[x] = new Array([this.tiles_height]);
 		for(var y = 0; y < this.tiles_height; y++) {
 			this.grid[x][y] = null;
 		}
 	}
-	console.log("Created world of", this.tiles_width, "x", this.tiles_height, "tiles");
+	console.log("Created new grid of", this.tiles_width, "x", this.tiles_height, "tiles");
 }
 
+
+
+
+World.prototype.restart = function() {
+	this.resetGrid();
+	for (var id in this.players) {
+		var p = this.players[id];
+		p.alive = true;
+		this.addPlayer(p);
+	}
+}
+
+World.prototype.restartWhenAllPlayersDied = function() {
+	for (var id in this.players) {
+		var p = this.players[id];
+		if(p.alive) {
+			return false;
+		}
+	}
+	this.restart();
+	return true;
+}
 
 World.prototype.movePlayers = function(player) {
 	if(this.paused) {
@@ -47,9 +73,15 @@ World.prototype.movePlayers = function(player) {
 		if(p.x < 0 || p.y < 0 || p.x >= this.grid.length || p.y >= this.grid[p.x].length) {
 			// Player collide with wall!
 			p.die();
+			if(this.restartWhenAllPlayersDied()) {
+				return;
+			}
 		} else if(this.grid[p.x][p.y] != null){
 			// Someone was already here
 			p.die();
+			if(this.restartWhenAllPlayersDied()) {
+				return;
+			}
 		} else {
 			// Set player to new position on grid
 			this.grid[p.x][p.y] = p.color;
