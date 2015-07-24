@@ -1,20 +1,32 @@
 $(function() {
   var $window = $(window);
   var $logArea = $('.logArea');
+  var $host = $('#host');
   var $body = $('body');
   var $world = $('#world');
-  var host = 'ws://localhost:3000';
-  // var host = 'ws://192.168.59.103:3000';
-  
-  console.log("Connecting to:", host);
-  
-  // var socket = io();   // Connects to URL where client is hosted.
-  var socket = io(host); // Now we can open static HTML without having the nodejs server running
-  
   var ctx = $world[0].getContext("2d");
   var worldBackgroundColor = $('#world').css('backgroundColor');
+  
+  var socket;
 
-  showConnectionStatus();
+  var host = 'ws://' + $host.val() + ':3000';
+  // var host = 'ws://localhost:3000';
+  // var host = 'ws://192.168.59.103:3000';
+
+
+  $("#connect").click( function() {
+    connect();
+  });
+
+  connect();
+
+  function connect() {
+    host = 'ws://' + $host.val() + ':3000';
+    console.log("Connecting to:", host);
+    socket = io(host);
+    showConnectionStatus();
+  }
+
 
   function setupWorld(world) {
     console.log("Setup world: ", Object.keys(world), world);
@@ -139,7 +151,7 @@ $(function() {
     // console.log(data.player + ' left. ', data);
     // logClients(data);
   });
-  
+
   socket.on('error', function (error) {
     console.log('ERROR: ', error);
   });

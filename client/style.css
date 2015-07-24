@@ -1,12 +1,9 @@
 body {
   background-color: #F6FAFC;
+  color: gray;
 }
 
 #world {
   border: 1px dashed gray;
   background-color: #FAF7EC;
-}
-
-.logArea {
-  color: gray;
 }
