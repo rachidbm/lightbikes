@@ -4,13 +4,13 @@ var Agent = require('./agent.js');
 var host = process.env.HOST || 'ws://localhost:3000';
 console.log("Connecting to:", host);
 
-var socket = io(host); // Now we can open static HTML without having the nodejs server running
+var socket = io(host);
 
 var agent = null;
 
 
 function directionChangedCallback(newDirection) {
-	console.log("emit change direction", newDirection);
+	// console.log("emit change direction", newDirection);
 	socket.emit("change direction", newDirection);
 }
 
@@ -23,14 +23,6 @@ socket.on('connected', function (data) {
 socket.on("disconnect", function(){
   console.log("disconnected from server");
   agent = null;
-});
-
-socket.on('user joined', function (data) {
-  console.log(data.player + ' joined. ');
-});
-
-socket.on('user left', function (data) {
-  console.log(data.player + ' left. ');
 });
 
 socket.on('render', function (data) {

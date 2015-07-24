@@ -13,6 +13,7 @@ function Agent(id, directionChangedCallback) {
 Agent.prototype.tick = function(world) { 
   this.tickCounter++;
   if(this.tickCounter % this.actionSpeed != 0) {
+    this.tickCounter = 0;
     return;
   }
 

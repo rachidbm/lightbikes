@@ -4,7 +4,7 @@ $(function() {
   var $body = $('body');
   var $world = $('#world');
   var host = 'ws://localhost:3000';
-  // var host = 'ws://192.168.59.104:3000';
+  // var host = 'ws://192.168.59.103:3000';
   
   console.log("Connecting to:", host);
   
@@ -115,8 +115,18 @@ $(function() {
     // render(data);
   });
 
+  socket.on('render', function (data) {
+    // console.log("render: ", data);
+    render(data.world);
+    logClients(data);
+  });
+
+  socket.on('connect_error', function (error) {
+    console.log('Failed connecting to:', host, error);
+  });
+
   socket.on("disconnect", function(){
-    console.log("disconnected from server");
+    console.log("Disconnected from server");
     showConnectionStatus();
   });
 
@@ -129,12 +139,9 @@ $(function() {
     // console.log(data.player + ' left. ', data);
     // logClients(data);
   });
-
-  socket.on('render', function (data) {
-    // console.log("render: ", data);
-    render(data.world);
-    logClients(data);
+  
+  socket.on('error', function (error) {
+    console.log('ERROR: ', error);
   });
-
 
 });
