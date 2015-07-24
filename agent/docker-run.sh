@@ -1,15 +1,15 @@
 
 ## Set the environment for docker with: 
+#echo "IP address of Docker containers: `boot2docker ip`";
 echo 'Having problems? Try again after running: ';
 echo '$(boot2docker shellinit)';
 
 export HOST="ws://`boot2docker ip`:3000";
-#export HOST="ws://localhost:3000";
-
+echo "Agents will connect to: $HOST";
 
 if [ "$1" == "" ]; then	
-	#docker run --name lightbikes-robot rachidbm/lightbikes-robot;
-	docker run -e "HOST=$HOST" rachidbm/lightbikes-robot;
+	#docker run -e "HOST=$HOST" rachidbm/lightbikes-robot;
+	docker --tlsverify=false run -e "HOST=$HOST" rachidbm/lightbikes-robot;
 	exit;
 fi
 NR=$1
@@ -17,7 +17,7 @@ NR=$1
 echo "nr of conatainers to start: $NR";
 for (( c=1; c<=$NR; c++ )) do
 	echo $c;
-  docker run -d -e "HOST=$HOST" rachidbm/lightbikes-robot;
+  docker --tlsverify=false run -d -e "HOST=$HOST" rachidbm/lightbikes-robot;
 done
 
 
