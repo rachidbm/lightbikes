@@ -1,0 +1,12 @@
+{
+  "name": "lightbikes-3d-client",
+  "version": "0.0.0",
+  "description": "3d client for Multiplayer lightbikes",
+  "author": "Rachid  Ben Moussa",
+  "private": true,
+  "license": "GPL",
+  "dependencies": {
+    "n3d-threejs": "70.0",
+    "threejs-examples": "60.0"
+  }
+}
