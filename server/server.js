@@ -59,6 +59,11 @@ io.on('connection', function (socket) {
 
   socket.on('restart', function () {
     world.restart();
+    // TODO: should be broadcasted, but broadcast doesn't work here.
+    socket.emit('restart', {
+      player: socket.userId,
+      world: world
+    });
   });
 
   socket.on('toggle pause', function () {
