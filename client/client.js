@@ -14,6 +14,23 @@ $(function() {
   // var host = 'ws://192.168.59.103:3000';
 
 
+
+  $('#world').on( "swipeleft", function swipeHandler( event ) {
+    console.log("Swipe left", event);
+  
+  }).on( "swiperight", function swipeHandler( event ) {
+    console.log("Swipe right", event);
+    
+  }).on( "swipeup", function swipeHandler( event ) {
+    console.log("Swipe up", event);
+    
+  }).on( "swipedown", function swipeHandler( event ) {
+    console.log("Swipe down", event);
+    
+  });
+
+  
+
   $("#connect").click( function() {
     connect();
   });
