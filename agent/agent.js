@@ -6,7 +6,7 @@ var C = require("./config");
 function Agent(id, directionChangedCallback) {
   this.id = id;
   this.tickCounter = 0;
-  this.actionSpeed = 1; // Every 'x' ticks this Agent does something
+  this.actionSpeed = 1; // Every 'x' ticks this Agent does something. Change to 0 for an agent which does nothing
   this.directionChanged = directionChangedCallback;
 }
 

@@ -5,7 +5,7 @@ var WIDTH = 1024;
 var HEIGHT = 768;
 
 var camera, scene, renderer, plane, controls;
-var cube;
+// var cube;
 
 // var offsetX = WORLD.tiles_width/2 - 0.5;
 // var offsetY = WORLD.tiles_height/2 - 0.5;
@@ -122,6 +122,7 @@ function addCube(x, y, color) {
 	var geometry = new THREE.BoxGeometry(1, 1, 1);
 	var material = new THREE.MeshPhongMaterial( {color: color} );
 	cube = new THREE.Mesh( geometry, material );
+	var cube = new THREE.Mesh( geometry, material );
 	cube.position.set(x - offsetX, y - offsetY, -0.5);
 	plane.add(cube);
 	grid[x][y] = color;
