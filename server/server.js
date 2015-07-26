@@ -20,7 +20,7 @@ app.use(express.static(__dirname + '/../client'));
 server.listen(port, function () {
   console.log('Server listening at %s:%s', host, port);
   console.log("Settings; ", C);
-  world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE);
+  world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE, onWorldRestart);
   startLoop();
 });
 
@@ -34,7 +34,6 @@ function loop() {
   });
 }
 
-
 function clientConnected(socket) {
   var player = world.createPlayer();
   socket.userId = player.id;
@@ -46,6 +45,11 @@ function clientConnected(socket) {
   });
 }
 
+function onWorldRestart() {
+  io.emit('restart', {
+    world: world
+  });
+}
 
 io.on('connection', function (socket) {  
 
@@ -57,13 +61,9 @@ io.on('connection', function (socket) {
     world: world
   });
 
+
   socket.on('restart', function () {
     world.restart();
-    // TODO: should be broadcasted, but broadcast doesn't work here.
-    socket.emit('restart', {
-      player: socket.userId,
-      world: world
-    });
   });
 
   socket.on('toggle pause', function () {

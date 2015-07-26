@@ -4,7 +4,7 @@ var uuid = require('uuid');
 var Player = require("./player.js");
 
 
-function World(width, height, tileSize) {
+function World(width, height, tileSize, onWorldRestart) {
 	this.width = width;
 	this.height = height;
 	this.tileSize = tileSize;
@@ -16,6 +16,7 @@ function World(width, height, tileSize) {
     throw("ERROR: WORLD.HEIGHT should be a multiple of tileSize");
   }
 	this.players = {};
+	this.onWorldRestart = onWorldRestart;
 
 	this.tiles_width = width / tileSize;
 	this.tiles_height = height / tileSize;
@@ -37,8 +38,6 @@ World.prototype.resetGrid = function() {
 }
 
 
-
-
 World.prototype.restart = function() {
 	this.resetGrid();
 	for (var id in this.players) {
@@ -46,6 +45,7 @@ World.prototype.restart = function() {
 		p.alive = true;
 		this.addPlayer(p);
 	}
+	this.onWorldRestart();
 }
 
 World.prototype.restartWhenAllPlayersDied = function() {

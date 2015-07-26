@@ -54,10 +54,7 @@ function initScene() {
 	light = new THREE.DirectionalLight( 0xffffff );
 	light.position.set( 0, 0, 1 ).normalize();
   camera.add(light);
-}
 
-function addCube() {
-	renderCube(0, 0, 0x1f77b4);
 }
 
 function animate() {
@@ -73,13 +70,13 @@ function animate() {
 
 function setupWorld(world) {
 	initScene();
-	console.log("world", world);
-	console.log("size: ", world.tiles_width, "x", world.tiles_height);
+	// console.log("world", world);
+	// console.log("size: ", world.tiles_width, "x", world.tiles_height);
 
 	var geometry = new THREE.PlaneGeometry(world.tiles_width, world.tiles_height);
 	var material = new THREE.MeshBasicMaterial( {color: 0xD5D5D5, side: THREE.DoubleSide} );
 	plane = new THREE.Mesh( geometry, material );
-	plane.rotation.x = -Math.PI/2; //-90 degrees around the xaxis 
+	plane.rotation.x = Math.PI/2; //-90 degrees around the xaxis 
 	plane.position.set(0, 0, 0);
 	scene.add( plane );
 
@@ -94,11 +91,10 @@ function setupWorld(world) {
 
 
 function updateGrid(world) {
-	// console.log("updateGrid", world);
   for(var x = 0; x < world.tiles_width; x++) {
     for(var y = 0; y < world.tiles_height; y++) {
       if(world.grid[x][y] != null && grid[x][y] == null) {
-      	addCube(x - offsetX, y - offsetY, world.grid[x][y]);
+      	addCube(x, y, world.grid[x][y]);
       }
     }
   }
@@ -106,7 +102,6 @@ function updateGrid(world) {
 
 
 function resetGrid(world) {
-	// console.log("Reset Grid");
 	grid = new Array([world.tiles_width]); 
 	for(var x = 0; x < world.tiles_width; x++) {
 		grid[x] = new Array([world.tiles_height]);
@@ -120,11 +115,16 @@ function resetGrid(world) {
 
 
 function addCube(x, y, color) {
+	if(grid[x][y] != null) {
+		console.log("Skip", x, y, " already cube with color: ", grid[x][y]);
+		return;
+	}
 	var geometry = new THREE.BoxGeometry(1, 1, 1);
 	var material = new THREE.MeshPhongMaterial( {color: color} );
 	cube = new THREE.Mesh( geometry, material );
-	cube.position.set(x, y, 0.5);
+	cube.position.set(x - offsetX, y - offsetY, -0.5);
 	plane.add(cube);
+	grid[x][y] = color;
 }
 
 
