@@ -12,31 +12,31 @@
 			/* margin: 0px; */
 			overflow: hidden;
 		}
+		#world {
+			
+		}
 		#border {
-		  border: 1px dashed gray;
-		  background-color: #FAF7EC;
-		  width:640px;
-		  height:480px;
+	  		border: 1px dashed gray;
+  			background-color: #FAF7EC;
+			width:640px;
+	  		height:480px;
+			float:left;
 		}		
+		#stats {
+			float:left;
+		}
 	</style>
 </head>
 
 <body>
+	<div id="border">
+		<div id="world"> </div>
+	</div>
+	<div id="stats">
 
-  <div id="border">
-  	<div id="world"> </div>
-  </div>
-<!--
-  <canvas id="world" ></canvas>
-  <div class="settings">
-    Server: <input type="text" id="host" value="localhost" />
-    <input type="button" id="connect" value="Connect" />
-
-  </div>
-  <div class="logArea" />
--->
 	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script> 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.js"></script> 
+	<script src="stats.min.js"></script>
 	<script src="3d-client.js"></script>
 </body>
 </html>
