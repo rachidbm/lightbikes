@@ -1,1 +1,2 @@
-docker build -t rachidbm/lightbikes-server .
+$(boot2docker shellinit)
+docker --tlsverify=false build -t rachidbm/lightbikes-server .

@@ -1,2 +1,2 @@
 $(boot2docker shellinit)
-docker build -t rachidbm/lightbikes-robot .
+docker --tlsverify=false build -t rachidbm/lightbikes-robot .
