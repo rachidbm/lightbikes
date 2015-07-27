@@ -22,9 +22,9 @@ function init() {
 	renderer.setSize( WIDTH, HEIGHT );
 	renderer.setClearColor( 0xFAF7EC );
 	var $world = $('#world');
-	$('#world').replaceWith( renderer.domElement );
+	$('#world').append( renderer.domElement );
 	stats = new Stats();
-	$('#stats').replaceWith( stats.domElement );
+	$('#stats').append( stats.domElement );
 	
 	initScene();
 
@@ -187,7 +187,7 @@ Connection with Server
 */
 
 
-// var $host = $('#host');
+var $host = $('#host');
 var $body = $('body');
 // var $world = $('#world');
 // var ctx = $world[0].getContext("2d");
@@ -196,7 +196,8 @@ var $body = $('body');
 var socket;
 
 // var host = 'ws://' + $host ? $host.val() :  'localhost' + ':3000';
-var host = 'ws://localhost:3000';
+var host = 'ws://' + $host.val() + ':3000';
+// var host = 'ws://localhost:3000';
 // var host = 'ws://192.168.59.103:3000';
 
 
