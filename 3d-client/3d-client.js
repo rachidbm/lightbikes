@@ -1,14 +1,13 @@
 $(function() {
 
 var $window = $(window);
-var WIDTH = 1024;
-var HEIGHT = 768;
+var $body = $('body');
+var $border = $('#border');
 
 var camera, scene, renderer, plane, controls;
 
 var offsetX, offsetY;
 var grid; 
-
 
 init();
 animate();
@@ -16,8 +15,8 @@ animate();
 function init() {
 	renderer = new THREE.WebGLRenderer();
 	renderer.setPixelRatio( window.devicePixelRatio );
-	renderer.setSize( WIDTH, HEIGHT );
 	renderer.setClearColor( 0xFAF7EC );
+	onWindowResize();	// Sets size of renderer
 	var $world = $('#world');
 	$('#world').append( renderer.domElement );
 	stats = new Stats();
@@ -29,9 +28,8 @@ function init() {
 function initScene() {
 	scene = new THREE.Scene();
 
-	camera = new THREE.PerspectiveCamera( 25, WIDTH / HEIGHT, 1, 1000 );
+	camera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 1, 1000 );
 	camera.position.y = 80;
-	// camera.position.x = 100;
 	camera.position.z = 100;
 	scene.add(camera);
 
@@ -49,6 +47,11 @@ function initScene() {
 	light.position.set( 0, 0, 1 ).normalize();
   camera.add(light);
 
+	window.addEventListener( 'resize', onWindowResize, false );
+}
+
+function onWindowResize( event ) {
+	renderer.setSize(window.innerWidth - 20, window.innerHeight - 70);
 }
 
 function animate() {
@@ -159,11 +162,10 @@ Connection with Server
 */
 
 var $host = $('#host');
-var $body = $('body');
 
 var socket;
 
-var host = 'ws://' + $host.val() + ':3000';
+// var host = 'ws://' + $host.val() + ':3000';
 // var host = 'ws://localhost:3000';
 
 connect();
