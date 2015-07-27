@@ -5,10 +5,7 @@ var WIDTH = 1024;
 var HEIGHT = 768;
 
 var camera, scene, renderer, plane, controls;
-// var cube;
 
-// var offsetX = WORLD.tiles_width/2 - 0.5;
-// var offsetY = WORLD.tiles_height/2 - 0.5;
 var offsetX, offsetY;
 var grid; 
 
@@ -27,8 +24,6 @@ function init() {
 	$('#stats').append( stats.domElement );
 	
 	initScene();
-
-	// addCube();
 }
 
 function initScene() {
@@ -49,7 +44,6 @@ function initScene() {
 	controls.staticMoving = true;
 	controls.dynamicDampingFactor = 0.3;
 	controls.keys = [ 65, 83, 68 ];
-	// controls.addEventListener( 'change', render );
 	
 	light = new THREE.DirectionalLight( 0xffffff );
 	light.position.set( 0, 0, 1 ).normalize();
@@ -59,9 +53,6 @@ function initScene() {
 
 function animate() {
 	requestAnimationFrame( animate );
-	// cube.rotation.x += 0.005;
-	// cube.rotation.y += 0.005;
-
 	renderer.render( scene, camera );
 	controls.update();
 	stats.update();
@@ -70,9 +61,6 @@ function animate() {
 
 function setupWorld(world) {
 	initScene();
-	// console.log("world", world);
-	// console.log("size: ", world.tiles_width, "x", world.tiles_height);
-
 	var geometry = new THREE.PlaneGeometry(world.tiles_width, world.tiles_height);
 	var material = new THREE.MeshBasicMaterial( {color: 0xD5D5D5, side: THREE.DoubleSide} );
 	plane = new THREE.Mesh( geometry, material );
@@ -113,7 +101,6 @@ function resetGrid(world) {
 }
 
 
-
 function addCube(x, y, color) {
 	if(grid[x][y] != null) {
 		console.log("Skip", x, y, " already cube with color: ", grid[x][y]);
@@ -129,24 +116,13 @@ function addCube(x, y, color) {
 }
 
 
-
 // Keyboard events
 $window.keydown(function (event) {
-  // Auto-focus the current input when a key is typed
-  if (!(event.ctrlKey || event.metaKey || event.altKey)) {
-    // $currentInput.focus();
-  }
-
-  // When the client hits ENTER on their keyboard
-  if (event.which === 13) {
-  }
-
   var newDirection = 0;
   var step = 1;
   switch(event.keyCode) {
   case 67: // c
-  	// Reset camera position
-  	controls.reset();
+  	controls.reset();		// Reset camera position
     break;
   case 82: // r
   	// initScene();
@@ -157,19 +133,15 @@ $window.keydown(function (event) {
     break;
   case 37: // LEFT
     newDirection = 4;
-    // cube.position.x -= step;
     break;
   case 38: // UP
   	newDirection = 1;
-    // cube.position.y += step;
     break;
   case 39: // RIGHT 
   	newDirection = 2;
-    // cube.position.x += step;
     break;    
   case 40: // DOWN
   	newDirection = 3;
-    // cube.position.y -= step;
     break;
   }
   if(newDirection > 0) {
@@ -186,21 +158,13 @@ $window.keydown(function (event) {
 Connection with Server
 */
 
-
 var $host = $('#host');
 var $body = $('body');
-// var $world = $('#world');
-// var ctx = $world[0].getContext("2d");
-// var worldBackgroundColor = $('#world').css('backgroundColor');
 
 var socket;
 
-// var host = 'ws://' + $host ? $host.val() :  'localhost' + ':3000';
 var host = 'ws://' + $host.val() + ':3000';
 // var host = 'ws://localhost:3000';
-// var host = 'ws://192.168.59.103:3000';
-
-
 
 connect();
 
@@ -246,8 +210,6 @@ socket.on("disconnect", function(){
   console.log("Disconnected from server");
   showConnectionStatus();
 });
-
-
 
 
 

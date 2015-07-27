@@ -11,8 +11,6 @@ $(function() {
 
   var host = 'ws://' + $host.val() + ':3000';
   // var host = 'ws://localhost:3000';
-  // var host = 'ws://192.168.59.103:3000';
-
 
   $("#connect").click( function() {
     connect();
