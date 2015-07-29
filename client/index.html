@@ -3,7 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>Lightbikes</title>
-  <link rel="stylesheet" href="style.css">
+  <style type="text/css">
+    body {
+      background-color: #F6FAFC;
+      color: gray;
+    }
+
+    #world {
+      border: 1px dashed gray;
+      background-color: #FAF7EC;
+    }
+  </style>
 </head>
 <body>
   <canvas id="world" width="640" height="480"></canvas>
@@ -13,8 +23,15 @@
     <input type="button" id="connect" value="Connect" />
 
   </div>
-  <div class="logArea" />
+  
+  <div class="controls">
+    Space = start and pause<br />
+    Play with: UP, DOWN, LEFT, RIGT <br />
+    r = restart <br />
+  </div>
 
+<hr />
+<div class="logArea" />
 <!-- 
       "jquery": "2.1.4",
   <script src="/jquery/ jquery.js"></script>

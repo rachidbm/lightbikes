@@ -15,13 +15,12 @@ animate();
 function init() {
 	renderer = new THREE.WebGLRenderer();
 	renderer.setPixelRatio( window.devicePixelRatio );
-	renderer.setClearColor( 0xFAF7EC );
+	// renderer.setClearColor( 0xFAF7EC );
+	renderer.setClearColor( 'black' );
 	onWindowResize();	// Sets size of renderer
-	var $world = $('#world');
-	$('#world').append( renderer.domElement );
+	document.getElementById('world').appendChild( renderer.domElement );
 	stats = new Stats();
-	$('#stats').append( stats.domElement );
-	
+	document.getElementById('stats').appendChild( stats.domElement );	
 	initScene();
 }
 
@@ -51,7 +50,11 @@ function initScene() {
 }
 
 function onWindowResize( event ) {
-	renderer.setSize(window.innerWidth - 20, window.innerHeight - 70);
+	var width = window.innerWidth;
+	if(window.innerWidth > window.innerHeight * 1.3) { 
+		// var width = window.innerHeight * 1.3;
+	}
+	renderer.setSize(width - 20, window.innerHeight - 115);
 }
 
 function animate() {
@@ -73,8 +76,6 @@ function setupWorld(world) {
 
 	offsetX = world.tiles_width/2 - 0.5;
 	offsetY = world.tiles_height/2 - 0.5;
-
-	localGrid = new Array([world.tiles_width]); 
 
 	resetGrid(world);
 	updateGrid(world);
@@ -106,7 +107,7 @@ function resetGrid(world) {
 
 function addCube(x, y, color) {
 	if(grid[x][y] != null) {
-		console.log("Skip", x, y, " already cube with color: ", grid[x][y]);
+		console.log("Skip", x, y, " already cube with color: ", grid[x][y].toString(16));
 		return;
 	}
 	var geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -165,7 +166,7 @@ var $host = $('#host');
 
 var socket;
 
-// var host = 'ws://' + $host.val() + ':3000';
+var host = 'ws://' + $host.val() + ':3000';
 // var host = 'ws://localhost:3000';
 
 connect();
