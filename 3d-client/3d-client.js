@@ -70,34 +70,22 @@ function initBackground() {
 
 	geometry = new THREE.Geometry();
 
-	var dep = 100;
-	// geometry.vertices.push( new THREE.Vector3(dep, dep, dep));
-
 	for ( i = 0; i < BG_PARTICLES; i ++) {
-		// var vertex = new THREE.Vector3(), 
-		var x = Math.random() * BG_SIZE - (BG_SIZE/3),
-		y = Math.random() * BG_SIZE - (BG_SIZE/3),
-		z = Math.random() * BG_SIZE - (BG_SIZE/3);
+		var x = Math.random() * BG_SIZE - (BG_SIZE/2),
+		y = Math.random() * BG_SIZE - (BG_SIZE/2),
+		z = Math.random() * BG_SIZE - (BG_SIZE/2);
 		geometry.vertices.push( new THREE.Vector3(x, y, z));
 	}
+	sizes = [1, 2, 3, 4];
 
-	parameters = [
-		[ [1, 1, 0.5], 5 ],
-		[ [0.95, 1, 0.5], 4 ],
-		[ [0.90, 1, 0.5], 3 ],
-		[ [0.85, 1, 0.5], 2 ],
-		[ [0.80, 1, 0.5], 1 ]
-	];
-
-	for ( i = 0; i < parameters.length; i ++ ) {
-		color = parameters[i][0];
-		size  = parameters[i][1];
+	// for ( i = 0; i < sizes.length; i ++ ) {
+	for ( i = 0; i < COLORS.length; i ++ ) {
+		var size = i % sizes.length;
 		materials[i] = new THREE.PointCloudMaterial( { size: size, color: getRandomColor()} );
 		particle = new THREE.PointCloud( geometry, materials[i] );
 		particle.rotation.x = Math.random() * 6;
 		particle.rotation.y = Math.random() * 6;
 		particle.rotation.z = Math.random() * 6;
-
 		scene.add( particle );
 	}
 
