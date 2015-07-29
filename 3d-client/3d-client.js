@@ -9,6 +9,17 @@ var camera, scene, renderer, plane, controls;
 var offsetX, offsetY;
 var grid; 
 
+var materials = [];
+
+var COLORS = [
+	'#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', 
+	'#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', 
+	'#01B9FF', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5',
+	'#e21400', '#91580f', '#f8a700', '#f78b00', '#58dc00', '#287b00', 
+	'#a8f07a', '#4ae8c4', '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
+ ];
+var currentColorIndex = 0;
+
 init();
 animate();
 
@@ -26,6 +37,7 @@ function init() {
 
 function initScene() {
 	scene = new THREE.Scene();
+	scene.fog = new THREE.FogExp2( 0x000000, 0.0007 );
 
 	camera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 1, 1000 );
 	camera.position.y = 80;
@@ -46,8 +58,61 @@ function initScene() {
 	light.position.set( 0, 0, 1 ).normalize();
   camera.add(light);
 
+	initBackground();
+
 	window.addEventListener( 'resize', onWindowResize, false );
 }
+
+var BG_PARTICLES = 10000,
+	BG_SIZE = 2000;
+
+function initBackground() {
+
+	geometry = new THREE.Geometry();
+
+	var dep = 100;
+	// geometry.vertices.push( new THREE.Vector3(dep, dep, dep));
+
+	for ( i = 0; i < BG_PARTICLES; i ++) {
+		// var vertex = new THREE.Vector3(), 
+		var x = Math.random() * BG_SIZE - (BG_SIZE/3),
+		y = Math.random() * BG_SIZE - (BG_SIZE/3),
+		z = Math.random() * BG_SIZE - (BG_SIZE/3);
+		geometry.vertices.push( new THREE.Vector3(x, y, z));
+	}
+
+	parameters = [
+		[ [1, 1, 0.5], 5 ],
+		[ [0.95, 1, 0.5], 4 ],
+		[ [0.90, 1, 0.5], 3 ],
+		[ [0.85, 1, 0.5], 2 ],
+		[ [0.80, 1, 0.5], 1 ]
+	];
+
+	for ( i = 0; i < parameters.length; i ++ ) {
+		color = parameters[i][0];
+		size  = parameters[i][1];
+		materials[i] = new THREE.PointCloudMaterial( { size: size, color: getRandomColor()} );
+		particle = new THREE.PointCloud( geometry, materials[i] );
+		particle.rotation.x = Math.random() * 6;
+		particle.rotation.y = Math.random() * 6;
+		particle.rotation.z = Math.random() * 6;
+
+		scene.add( particle );
+	}
+
+}
+
+
+function getRandomColor() {
+	return COLORS[Math.floor(Math.random() * COLORS.length)];
+}
+
+function getNextColor() {
+	currentColorIndex++;
+	return COLORS[currentColorIndex % COLORS.length];
+}
+
 
 function onWindowResize( event ) {
 	var width = window.innerWidth;
@@ -62,8 +127,20 @@ function animate() {
 	renderer.render( scene, camera );
 	controls.update();
 	stats.update();
+	updateBackground();
 }
 
+function updateBackground() {
+	var time = Date.now() * 0.000005;
+	for ( i = 0; i < scene.children.length; i ++ ) {
+		var object = scene.children[ i ];
+		if ( object instanceof THREE.PointCloud ) {
+			object.rotation.y = Date.now() * 0.00001;
+		}
+	}
+
+	
+}
 
 function setupWorld(world) {
 	initScene();

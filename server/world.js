@@ -152,12 +152,12 @@ function addRandomPlayer() {
 
 
 var COLORS = [
-			'#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', 
-	    '#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', 
-	    '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5',
-      '#e21400', '#91580f', '#f8a700', '#f78b00', '#58dc00', '#287b00', 
-     	'#a8f07a', '#4ae8c4', '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
-    ];
+	'#1f77b4', '#aec7e8', '#00344C', '#ffbb78', '#2ca02c', '#98df8a', 
+	'#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', 
+	'#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5',
+	'#e21400', '#91580f', '#f8a700', '#f78b00', '#58dc00', '#287b00', 
+	'#a8f07a', '#4ae8c4', '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
+ ];
 var currentColorIndex = 0;
 function getNextColor() {
 	currentColorIndex ++;
