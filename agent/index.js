@@ -14,17 +14,17 @@ function directionChangedCallback(newDirection) {
 	socket.emit("change direction", newDirection);
 }
 
-socket.on('connected', function (data) {
-  console.log("Connected to server, got ID: ", data.id);
-  agent = new Agent(data.id, directionChangedCallback);
-  console.log("I am: ", data.world.players[data.id]);
+socket.on('connected', function(data) {
+	console.log("Connected to server, got ID: ", data.id);
+	agent = new Agent(data.id, directionChangedCallback);
+	console.log("I am: ", data.world.players[data.id]);
 });
 
-socket.on("disconnect", function(){
-  console.log("disconnected from server");
-  agent = null;
+socket.on("disconnect", function() {
+	console.log("disconnected from server");
+	agent = null;
 });
 
-socket.on('render', function (data) {
-  agent.tick(data.world);
+socket.on('render', function(data) {
+	agent.tick(data.world);
 });

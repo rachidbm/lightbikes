@@ -1,4 +1,3 @@
-
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
@@ -17,7 +16,7 @@ var world;
 app.use(express.static(__dirname + '/../client'));
 
 // Startup 
-server.listen(port, function () {
+server.listen(port, function() {
   console.log('Server listening at %s:%s', host, port);
   console.log("Settings; ", C);
   world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE, onWorldRestart);
@@ -39,7 +38,7 @@ function clientConnected(socket) {
   socket.userId = player.id;
 
   socket.emit('connected', {
-    id: player.id, 
+    id: player.id,
     totalPlayers: world.getTotalPlayers(),
     world: world
   });
@@ -51,7 +50,7 @@ function onWorldRestart() {
   });
 }
 
-io.on('connection', function (socket) {  
+io.on('connection', function(socket) {
 
   clientConnected(socket);
 
@@ -62,48 +61,48 @@ io.on('connection', function (socket) {
   });
 
 
-  socket.on('restart', function () {
+  socket.on('restart', function() {
     world.restart();
   });
 
-  socket.on('toggle pause', function () {
+  socket.on('toggle pause', function() {
     world.togglePause();
   });
 
-  socket.on('change direction', function (newDirection) {
+  socket.on('change direction', function(newDirection) {
     var p = world.players[socket.userId];
-    switch(newDirection) {
-    case C.DIRECTION.LEFT:
-      p.left();
-      break;
-    case C.DIRECTION.UP:
-      p.up();
-      break;
-    case C.DIRECTION.RIGHT:
-      p.right();
-      break;
-    case C.DIRECTION.DOWN:
-      p.down();
-      break;
+    switch (newDirection) {
+      case C.DIRECTION.LEFT:
+        p.left();
+        break;
+      case C.DIRECTION.UP:
+        p.up();
+        break;
+      case C.DIRECTION.RIGHT:
+        p.right();
+        break;
+      case C.DIRECTION.DOWN:
+        p.down();
+        break;
     }
   });
 
-  socket.on('disconnect', function () {
+  socket.on('disconnect', function() {
     // remove the userId from global userIds list
-      console.log(socket.userId + " disconnected");
-      world.removePlayer(socket.userId);
+    console.log(socket.userId + " disconnected");
+    world.removePlayer(socket.userId);
 
-      socket.broadcast.emit('user left', {
-        player: socket.userId,
-        totalPlayers: world.getTotalPlayers(),
-        world: world
-      });
+    socket.broadcast.emit('user left', {
+      player: socket.userId,
+      totalPlayers: world.getTotalPlayers(),
+      world: world
+    });
   });
 
 });
 
 
-var startLoop = function () {
-    setTimeout(startLoop, C.TICK_TIME);
-    loop();
+var startLoop = function() {
+  setTimeout(startLoop, C.TICK_TIME);
+  loop();
 }

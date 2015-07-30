@@ -12,57 +12,55 @@ function Player(id, color, size, x, y) {
 	this.alive = true;
 }
 
-Player.prototype.die = function() { 
+Player.prototype.die = function() {
 	console.log(this.id + " died");
 	this.alive = false;
 }
 
-Player.prototype.up = function() { 
-	if(this.direction != C.DIRECTION.DOWN) {
+Player.prototype.up = function() {
+	if (this.direction != C.DIRECTION.DOWN) {
 		this.direction = C.DIRECTION.UP;
 	}
 };
 
-Player.prototype.right = function() { 
-	if(this.direction != C.DIRECTION.LEFT) {
+Player.prototype.right = function() {
+	if (this.direction != C.DIRECTION.LEFT) {
 		this.direction = C.DIRECTION.RIGHT;
 	}
 };
 
-Player.prototype.down = function() { 
-	if(this.direction != C.DIRECTION.UP) {
+Player.prototype.down = function() {
+	if (this.direction != C.DIRECTION.UP) {
 		this.direction = C.DIRECTION.DOWN;
 	}
 };
 
-Player.prototype.left = function() { 
-	if(this.direction != C.DIRECTION.RIGHT) {
+Player.prototype.left = function() {
+	if (this.direction != C.DIRECTION.RIGHT) {
 		this.direction = C.DIRECTION.LEFT;
 	}
 };
 
 
-Player.prototype.move = function() { 
-	if(!this.alive) {
+Player.prototype.move = function() {
+	if (!this.alive) {
 		return;
 	}
 
 	// var step = this.size;
 	var step = 1;
-	switch(this.direction) {
-	case C.DIRECTION.UP:
-		this.y -= step;
-    break;
-	case C.DIRECTION.RIGHT:
-		this.x += step;
-    break;
-	case C.DIRECTION.DOWN:
-		this.y += step;
-    break;
-	case C.DIRECTION.LEFT:
-		this.x -= step;
-    break;
-	}	
+	switch (this.direction) {
+		case C.DIRECTION.UP:
+			this.y -= step;
+			break;
+		case C.DIRECTION.RIGHT:
+			this.x += step;
+			break;
+		case C.DIRECTION.DOWN:
+			this.y += step;
+			break;
+		case C.DIRECTION.LEFT:
+			this.x -= step;
+			break;
+	}
 };
-
-
