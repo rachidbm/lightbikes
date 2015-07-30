@@ -18,9 +18,12 @@ function init() {
 	// renderer.setClearColor( 0xFAF7EC );
 	renderer.setClearColor( 'black' );
 	onWindowResize();	// Sets size of renderer
+	window.addEventListener( 'resize', onWindowResize, false );
+	
 	document.getElementById('world').appendChild( renderer.domElement );
 	stats = new Stats();
 	document.getElementById('stats').appendChild( stats.domElement );	
+
 	initScene();
 }
 
@@ -46,7 +49,16 @@ function initScene() {
 	light.position.set( 0, 0, 1 ).normalize();
   camera.add(light);
 
-	window.addEventListener( 'resize', onWindowResize, false );
+	// Background
+	var geometry  = new THREE.SphereGeometry(90, 32, 32);
+	var url   = 'node_modules/threex.oimo/examples/bower_components/threex.planets/images/galaxy_starfield.png';
+	var material  = new THREE.MeshBasicMaterial({
+		map : THREE.ImageUtils.loadTexture(url),
+		side  : THREE.BackSide
+	});
+	var starSphere  = new THREE.Mesh(geometry, material);
+	scene.add(starSphere);
+
 }
 
 function onWindowResize( event ) {
