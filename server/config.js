@@ -14,6 +14,6 @@ var CONFIG = {
     DOWN: 3,
     LEFT: 4
   }
-}
+};
 
 module.exports = CONFIG;

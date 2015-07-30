@@ -9,10 +9,10 @@ function World(width, height, tileSize, onWorldRestart) {
 	this.height = height;
 	this.tileSize = tileSize;
 	this.paused = true;
-	if (width % tileSize != 0) {
+	if (width % tileSize !== 0) {
 		throw ("ERROR: WORLD.WIDTH should be a multiple of tileSize");
 	}
-	if (height % tileSize != 0) {
+	if (height % tileSize !== 0) {
 		throw ("ERROR: WORLD.HEIGHT should be a multiple of tileSize");
 	}
 	this.players = {};
@@ -35,7 +35,7 @@ World.prototype.resetGrid = function() {
 		}
 	}
 	console.log("Created new grid of", this.tiles_width, "x", this.tiles_height, "tiles");
-}
+};
 
 
 World.prototype.restart = function() {
@@ -46,7 +46,7 @@ World.prototype.restart = function() {
 		this.addPlayer(p);
 	}
 	this.onWorldRestart();
-}
+};
 
 World.prototype.restartWhenAllPlayersDied = function() {
 	for (var id in this.players) {
@@ -57,7 +57,7 @@ World.prototype.restartWhenAllPlayersDied = function() {
 	}
 	this.restart();
 	return true;
-}
+};
 
 World.prototype.movePlayers = function(player) {
 	if (this.paused) {
@@ -76,7 +76,7 @@ World.prototype.movePlayers = function(player) {
 			if (this.restartWhenAllPlayersDied()) {
 				return;
 			}
-		} else if (this.grid[p.x][p.y] != null) {
+		} else if (this.grid[p.x][p.y] !== null) {
 			// Someone was already here
 			p.die();
 			if (this.restartWhenAllPlayersDied()) {
@@ -87,25 +87,25 @@ World.prototype.movePlayers = function(player) {
 			this.grid[p.x][p.y] = p.color;
 		}
 	}
-}
+};
 
 World.prototype.createPlayer = function() {
 	var player = new Player(uuid.v4(), getNextColor(), this.tileSize);
 	this.addPlayer(player);
 	return player;
-}
+};
 
 World.prototype.addPlayer = function(player) {
 	// Initial direction is random
 	player.direction = Math.floor((Math.random() * 4)) + 1;
 	position = this.randomEmptyPosition();
-	if (position != null) {
+	if (position !== null) {
 		player.x = position.x;
 		player.y = position.y;
 		this.grid[player.x][player.y] = player.color;
 		this.players[player.id] = player;
 	}
-}
+};
 
 
 World.prototype.randomEmptyPosition = function() {
@@ -118,7 +118,7 @@ World.prototype.randomEmptyPosition = function() {
 		}
 		x = Math.floor(Math.random() * this.tiles_width);
 		y = Math.floor(Math.random() * this.tiles_height);
-		if (this.grid[x][y] != null) {
+		if (this.grid[x][y] !== null) {
 			// This spot is already taken, try again...
 			attemptsLeft--;
 			continue;
@@ -126,29 +126,29 @@ World.prototype.randomEmptyPosition = function() {
 			return {
 				x: x,
 				y: y
-			}
+			};
 		}
 	}
 	return null;
-}
+};
 
 World.prototype.getTotalPlayers = function(player) {
 	return Object.keys(this.players).length;
-}
+};
 
 World.prototype.togglePause = function() {
 	this.paused = !this.paused;
-}
+};
 
 World.prototype.removePlayer = function(player_id) {
 	delete this.players[player_id];
-}
+};
 
 
 function addRandomPlayer() {
 	var player = new Player(uuid.v4(), getNiceColor(), C.PLAYER.SIZE);
 	addPlayer(player);
-}
+};
 
 
 var COLORS = [

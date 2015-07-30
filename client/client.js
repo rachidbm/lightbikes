@@ -38,8 +38,8 @@ $(function() {
     var grid = world.grid;
     for (var x = 0; x < world.tiles_width; x++) {
       for (var y = 0; y < world.tiles_height; y++) {
-        if (grid[x][y] != null) {
-          drawRect(x * world.tileSize, y * world.tileSize, world.tileSize, grid[x][y])
+        if (grid[x][y] !== null) {
+          drawRect(x * world.tileSize, y * world.tileSize, world.tileSize, grid[x][y]);
         } else {
           drawRect(x * world.tileSize, y * world.tileSize, world.tileSize, worldBackgroundColor);
         }
@@ -112,7 +112,6 @@ $(function() {
       $body.css("background-color", "#FFD9D9");
     }
   }
-
 
   socket.on('connected', function(data) {
     console.log("Connected to server, got ID: ", data.id);

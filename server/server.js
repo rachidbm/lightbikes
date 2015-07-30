@@ -105,4 +105,4 @@ io.on('connection', function(socket) {
 var startLoop = function() {
   setTimeout(startLoop, C.TICK_TIME);
   loop();
-}
+};

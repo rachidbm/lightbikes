@@ -76,7 +76,6 @@ $(function() {
 		stats.update();
 	}
 
-
 	function setupWorld(world) {
 		initScene();
 		var geometry = new THREE.PlaneGeometry(world.tiles_width, world.tiles_height);
@@ -100,7 +99,7 @@ $(function() {
 	function updateGrid(world) {
 		for (var x = 0; x < world.tiles_width; x++) {
 			for (var y = 0; y < world.tiles_height; y++) {
-				if (world.grid[x][y] != null && grid[x][y] == null) {
+				if (world.grid[x][y] !== null && grid[x][y] === null) {
 					addCube(x, y, world.grid[x][y]);
 				}
 			}
@@ -121,7 +120,7 @@ $(function() {
 
 
 	function addCube(x, y, color) {
-		if (grid[x][y] != null) {
+		if (grid[x][y] !== null) {
 			console.log("Skip", x, y, " already cube with color: ", grid[x][y].toString(16));
 			return;
 		}

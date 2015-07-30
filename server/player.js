@@ -15,7 +15,7 @@ function Player(id, color, size, x, y) {
 Player.prototype.die = function() {
 	console.log(this.id + " died");
 	this.alive = false;
-}
+};
 
 Player.prototype.up = function() {
 	if (this.direction != C.DIRECTION.DOWN) {
