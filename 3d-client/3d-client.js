@@ -9,15 +9,13 @@ $(function() {
 	var $border = $('#border');
 	var background_url = 'node_modules/threex.oimo/examples/bower_components/threex.planets/images/galaxy_starfield.png';
 
-	var camera, scene, renderer, 
-	plane, controls, grid;
-
+	var camera, scene, renderer, plane, controls, grid;
 
 	init();
 	animate();
 
 	function init() {
-		renderer = new THREE.WebGLRenderer();
+		renderer = new THREE.WebGLRenderer({antialias: true});
 		renderer.setPixelRatio(window.devicePixelRatio);
 		// renderer.setClearColor( 0xFAF7EC );
 		renderer.setClearColor('black');
@@ -34,8 +32,8 @@ $(function() {
 	function initScene() {
 		scene = new THREE.Scene();
 
-		camera = new THREE.PerspectiveCamera(25, window.innerWidth / window.innerHeight, 1, 1000);
-		camera.position.y = 80;
+		camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 1, 1000);
+		camera.position.y = 90;
 		camera.position.z = 100;
 		scene.add(camera);
 
