@@ -1,13 +1,17 @@
 $(function() {
 
+	loadJSFiles([
+		"plane.js"
+	]);
+
 	var $window = $(window);
 	var $body = $('body');
 	var $border = $('#border');
+	var background_url = 'node_modules/threex.oimo/examples/bower_components/threex.planets/images/galaxy_starfield.png';
 
-	var camera, scene, renderer, plane, controls;
+	var camera, scene, renderer, 
+	plane, controls, grid;
 
-	var offsetX, offsetY;
-	var grid;
 
 	init();
 	animate();
@@ -51,14 +55,16 @@ $(function() {
 
 		// Background
 		var geometry = new THREE.SphereGeometry(90, 32, 32);
-		var url = 'node_modules/threex.oimo/examples/bower_components/threex.planets/images/galaxy_starfield.png';
 		var material = new THREE.MeshBasicMaterial({
-			map: THREE.ImageUtils.loadTexture(url),
+			map: THREE.ImageUtils.loadTexture(background_url),
 			side: THREE.BackSide
 		});
-		var starSphere = new THREE.Mesh(geometry, material);
-		scene.add(starSphere);
+		var starSky = new THREE.Mesh(geometry, material);
+		scene.add(starSky);
 
+		// Default plane
+		// plane = new Plane(50, 50);
+		// scene.add(plane.getMesh());
 	}
 
 	function onWindowResize(event) {
@@ -78,18 +84,9 @@ $(function() {
 
 	function setupWorld(world) {
 		initScene();
-		var geometry = new THREE.PlaneGeometry(world.tiles_width, world.tiles_height);
-		var material = new THREE.MeshBasicMaterial({
-			color: 0xD5D5D5,
-			side: THREE.DoubleSide
-		});
-		plane = new THREE.Mesh(geometry, material);
-		plane.rotation.x = Math.PI / 2; //-90 degrees around the xaxis 
-		plane.position.set(0, 0, 0);
-		scene.add(plane);
 
-		offsetX = world.tiles_width / 2 - 0.5;
-		offsetY = world.tiles_height / 2 - 0.5;
+		plane = new Plane(world.tiles_width, world.tiles_height);
+		scene.add(plane.getMesh());
 
 		resetGrid(world);
 		updateGrid(world);
@@ -124,14 +121,7 @@ $(function() {
 			console.log("Skip", x, y, " already cube with color: ", grid[x][y].toString(16));
 			return;
 		}
-		var geometry = new THREE.BoxGeometry(1, 1, 1);
-		var material = new THREE.MeshPhongMaterial({
-			color: color
-		});
-		cube = new THREE.Mesh(geometry, material);
-		var cube = new THREE.Mesh(geometry, material);
-		cube.position.set(x - offsetX, y - offsetY, -0.5);
-		plane.add(cube);
+		plane.addCube(x, y, color);
 		grid[x][y] = color;
 	}
 
@@ -230,6 +220,18 @@ $(function() {
 		showConnectionStatus();
 	});
 
+
+	function loadJSFiles(filenames) {
+		for (var i = 0; i < filenames.length; i++) {
+			console.log("Loading: ", filenames[i]);
+			var fileref = document.createElement('script');
+			// fileref.setAttribute("type", "text/javascript");
+			fileref.setAttribute("src", filenames[i]);
+			if (typeof fileref !== "undefined") {
+				document.getElementsByTagName("head")[0].appendChild(fileref);
+			}
+		}
+	}
 
 
 });
