@@ -14,21 +14,19 @@
 		#world {
 			float:left;
 		}
-		#border {
-  		background-color: #00344C;
-  		/*background-color: #01B9FF;*/
-			width: 100%;
-	  	/*height: 768px;*/
+		#main {
+  		/*background-color: #00344C;*/
+			/*width: 100%;*/
 		}
 		#settings {
 			float:left;
 		}		
 		#controls {
-			float:left;
+			float: left;
 			padding: 5px;
 		}		
 		#stats {
-			float:right;
+			float: right;
 		}
 		#controls input {
 			width: 50px;
@@ -38,37 +36,42 @@
 </head>
 
 <body>
+
+<div id="main"> 
 	<div id="border">
 		<div id="world"> </div>
-		<div id="stats" />
 	</div>
 
-  <div id="settings">
-    <!-- Server: <input type="text" id="host" value="localhost" />
-    <input type="button" id="connect" value="Connect" /> -->
-    <br />
-  	Space = start and pause<br />
-  	Play with: UP, DOWN, LEFT, RIGT <br />
-  	r = restart <br />
-  	c = reset camera view <br />
-  	mouse click and drag to move camera view<br />
-  </div>
+	<div id="footer">
+	  <div id="settings">
+	    <!-- Server: <input type="text" id="host" value="localhost" />
+	    <input type="button" id="connect" value="Connect" /> -->
+	    <br />
+	  	Space = start and pause<br />
+	  	Play with: UP, DOWN, LEFT, RIGT <br />
+	  	r = restart <br />
+	  	c = reset camera view <br />
+	  	mouse click and drag to move camera view<br />
+	  </div>
 
-  <div id="controls"> 
-  	&nbsp;&nbsp;&nbsp;
-  	<input type="button" id="up" value="up" onclick="$(window).trigger($.Event('keydown', {keyCode: 38})); " />
-  	<br />
-  	<input type="button" id="left" value="left" onclick="$(window).trigger($.Event('keydown', {keyCode: 37})); " />
-  	<input type="button" id="right" value="right" onclick="$(window).trigger($.Event('keydown', {keyCode: 39})); " />
-  	<br />
-  	&nbsp;&nbsp;&nbsp;
-  	<input type="button" id="down" value="down" onclick="$(window).trigger($.Event('keydown', {keyCode: 40})); " />
+	  <div id="controls"> 
+	  	&nbsp;&nbsp;&nbsp;
+	  	<input type="button" id="up" value="up" onclick="$(window).trigger($.Event('keydown', {keyCode: 38})); " />
+	  	<br />
+	  	<input type="button" id="left" value="left" onclick="$(window).trigger($.Event('keydown', {keyCode: 37})); " />
+	  	<input type="button" id="right" value="right" onclick="$(window).trigger($.Event('keydown', {keyCode: 39})); " />
+	  	<br />
+	  	&nbsp;&nbsp;&nbsp;
+	  	<input type="button" id="down" value="down" onclick="$(window).trigger($.Event('keydown', {keyCode: 40})); " />
 
-  	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  	<input type="button" id="restart" value="restart" onclick="$(window).trigger($.Event('keydown', {keyCode: 82})); " />
-  </div>	
+	  	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	  	<input type="button" id="restart" value="restart" onclick="$(window).trigger($.Event('keydown', {keyCode: 82})); " />
+	  </div>	
+  	<div id="stats" />
+	</div>
 
-  <div class="logArea" />
+	<div class="logArea" />
+</div>
 
 	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script> 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.js"></script> 
