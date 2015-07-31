@@ -32,8 +32,8 @@ $(function() {
 	function initScene() {
 		scene = new THREE.Scene();
 
-		camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 1, 1000);
-		camera.position.y = 90;
+		camera = new THREE.PerspectiveCamera(15, window.innerWidth / window.innerHeight, 1, 1000);
+		camera.position.y = 150;
 		camera.position.z = 100;
 		scene.add(camera);
 
