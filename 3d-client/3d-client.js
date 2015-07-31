@@ -15,7 +15,9 @@ $(function() {
 	animate();
 
 	function init() {
-		renderer = new THREE.WebGLRenderer({antialias: true});
+		renderer = new THREE.WebGLRenderer({
+			antialias: true
+		});
 		renderer.setPixelRatio(window.devicePixelRatio);
 		// renderer.setClearColor( 0xFAF7EC );
 		renderer.setClearColor('black');
@@ -32,8 +34,9 @@ $(function() {
 	function initScene() {
 		scene = new THREE.Scene();
 
-		camera = new THREE.PerspectiveCamera(15, window.innerWidth / window.innerHeight, 1, 1000);
+		camera = new THREE.PerspectiveCamera(16, window.innerWidth / window.innerHeight, 1, 1000);
 		camera.position.y = 150;
+		// camera.position.x = 5;
 		camera.position.z = 100;
 		scene.add(camera);
 
@@ -68,7 +71,7 @@ $(function() {
 	function onWindowResize(event) {
 		var width = window.innerWidth;
 		if (window.innerWidth > window.innerHeight * 1.3) {
-			// var width = window.innerHeight * 1.3;
+			var width = window.innerHeight * 1.3;
 		}
 		renderer.setSize(width - 20, window.innerHeight - 115);
 	}
