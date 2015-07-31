@@ -166,19 +166,16 @@ $(function() {
 	Connection with Server
 	*/
 
-	var $host = $('#host');
+	// var $host = $('#host');
 
 	var socket;
-
-	var host = 'ws://' + $host.val() + ':3000';
-	// var host = 'ws://localhost:3000';
 
 	connect();
 
 	function connect() {
-		// host = 'ws://' + $host.val() + ':3000';
-		console.log("Connecting to:", host);
-		socket = io(host);
+		// console.log("Connecting to:", host);
+		console.log("Connecting...");
+		socket = io();
 		showConnectionStatus();
 	}
 
@@ -210,7 +207,7 @@ $(function() {
 	});
 
 	socket.on('connect_error', function(error) {
-		console.log('Failed connecting to:', host, error);
+		// console.log('Failed connecting:', error);
 	});
 
 	socket.on("disconnect", function() {

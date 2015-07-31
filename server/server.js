@@ -13,7 +13,9 @@ var C = require("./config");
 var world;
 
 // Routing
-app.use(express.static(__dirname + '/../client'));
+app.use('/3d', express.static(__dirname + '/../3d-client'));
+app.use('/2d', express.static(__dirname + '/../client'));
+
 
 // Startup 
 server.listen(port, function() {
