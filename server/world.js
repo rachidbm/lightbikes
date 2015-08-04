@@ -49,14 +49,17 @@ World.prototype.restart = function() {
 };
 
 World.prototype.restartWhenAllPlayersDied = function() {
+	var playerAlive = null;
 	for (var id in this.players) {
 		var p = this.players[id];
 		if (p.alive) {
-			return false;
+			playerAlive = p;
+			// return false;
+			break;
 		}
 	}
-	this.restart();
-	return true;
+	// this.restart();
+	return playerAlive === null;
 };
 
 World.prototype.movePlayers = function(player) {

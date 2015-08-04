@@ -26,14 +26,25 @@ server.listen(port, function() {
   startLoop();
 });
 
+var skipLoop = false;
 
 // Main loop, will be called every 'X' time, see startLoop()
 function loop() {
+  if(skipLoop) {
+    return;
+  }
   world.movePlayers();
-  io.emit('render', {
-    totalPlayers: world.getTotalPlayers(),
-    world: world
-  });
+  // Is there winner?
+  if(world.restartWhenAllPlayersDied()) {
+    skipLoop = true;
+    restartGame(world, 3);
+  } else {
+    skipLoop = false;
+    io.emit('render', {
+      totalPlayers: world.getTotalPlayers(),
+      world: world
+    });
+  }
 }
 
 function clientConnected(socket) {
@@ -108,6 +119,21 @@ io.on('connection', function(socket) {
 
 });
 
+
+var restartGame = function(world, seconds) {
+  console.log('restartGame:', seconds);
+  if(seconds > 0) {
+    io.emit('countdown', {
+      seconds: seconds
+    });
+    setTimeout(function() {
+      restartGame(world, seconds - 1)
+    }, 1000);
+  } else {
+    skipLoop = false;
+    world.restart();
+  }
+};
 
 var startLoop = function() {
   setTimeout(startLoop, C.TICK_TIME);

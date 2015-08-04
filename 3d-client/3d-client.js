@@ -105,6 +105,7 @@ $(function() {
 				}
 			}
 		}
+		// TODO highlight current position
 	}
 
 	function resetGrid(world) {
@@ -115,7 +116,7 @@ $(function() {
 				grid[x][y] = null;
 			}
 		}
-		console.log("Created new grid of", world.tiles_width, "x", world.tiles_height, "tiles");
+		// console.log("Created new grid of", world.tiles_width, "x", world.tiles_height, "tiles");
 	}
 
 
@@ -196,7 +197,7 @@ var playerId = null;
 
 	socket.on('connected', function(data) {
 		playerId = data.id;
-		console.log("Connected to server, got ID: ", playerId);
+		// console.log("Connected to server, got ID: ", playerId);
 		showConnectionStatus();
 		console.log("I am: ", data.world.players[playerId]);
 		setupWorld(data.world);
@@ -205,13 +206,17 @@ var playerId = null;
 	socket.on('restart', function(data) {
 		console.log("Restarted by ", data.player);
 		var p = data.world.players[playerId];
-		console.log("I'm standing on: ", p.x, p.y);
+		// console.log("I'm standing on: ", p.x, p.y);
 		initScene();
 		setupWorld(data.world);
 	});
 
 	socket.on('render', function(data) {
 		updateGrid(data.world);
+	});
+
+	socket.on('countdown', function(seconds) {
+		console.log('countdown:', seconds);
 	});
 
 	socket.on('connect_error', function(error) {
