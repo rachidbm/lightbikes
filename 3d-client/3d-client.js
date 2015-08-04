@@ -165,7 +165,7 @@ $(function() {
 
 
 
-
+var playerId = null;
 	/*
 
 	Connection with Server
@@ -195,14 +195,17 @@ $(function() {
 
 
 	socket.on('connected', function(data) {
-		console.log("Connected to server, got ID: ", data.id);
+		playerId = data.id;
+		console.log("Connected to server, got ID: ", playerId);
 		showConnectionStatus();
-		console.log("I am: ", data.world.players[data.id]);
+		console.log("I am: ", data.world.players[playerId]);
 		setupWorld(data.world);
 	});
 
 	socket.on('restart', function(data) {
 		console.log("Restarted by ", data.player);
+		var p = data.world.players[playerId];
+		console.log("I'm standing on: ", p.x, p.y);
 		initScene();
 		setupWorld(data.world);
 	});

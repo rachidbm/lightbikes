@@ -3,10 +3,11 @@ module.exports = Agent;
 var C = require("./config");
 
 
-function Agent(id, directionChangedCallback) {
+function Agent(id, directionChangedCallback, actionSpeed) {
+  if (typeof(actionSpeed) === "undefined") { actionSpeed = 1; }
   this.id = id;
   this.tickCounter = 0;
-  this.actionSpeed = 1; // Every 'x' ticks this Agent does something. Change to 0 for an agent which does nothing
+  this.actionSpeed = actionSpeed; // Every 'x' ticks this Agent does something. Change to 0 for an agent which does nothing
   this.directionChanged = directionChangedCallback;
 }
 
