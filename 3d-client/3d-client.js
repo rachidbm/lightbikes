@@ -9,7 +9,9 @@ $(function() {
 	var $border = $('#border');
 	var background_url = 'node_modules/threex.oimo/examples/bower_components/threex.planets/images/galaxy_starfield.png';
 
-	var camera, scene, renderer, plane, controls, grid;
+	var camera, scene, renderer, plane, controls, grid,
+		currentWidth = window.innerWidth,
+		currentHeight = window.innerHeight;
 
 	init();
 	animate();
@@ -19,9 +21,7 @@ $(function() {
 			antialias: true
 		});
 		renderer.setPixelRatio(window.devicePixelRatio);
-		// renderer.setClearColor( 0xFAF7EC );
 		renderer.setClearColor('black');
-		onWindowResize(); // Sets size of renderer
 		window.addEventListener('resize', onWindowResize, false);
 
 		document.getElementById('world').appendChild(renderer.domElement);
@@ -29,12 +29,13 @@ $(function() {
 		document.getElementById('stats').appendChild(stats.domElement);
 
 		initScene();
+		onWindowResize(); // Sets size of renderer
 	}
 
 	function initScene() {
 		scene = new THREE.Scene();
 
-		camera = new THREE.PerspectiveCamera(16, window.innerWidth / window.innerHeight, 1, 1000);
+		camera = new THREE.PerspectiveCamera(16, currentWidth / currentHeight, 1, 1000);
 		camera.position.y = 150;
 		// camera.position.x = 5;
 		camera.position.z = 100;
@@ -69,11 +70,14 @@ $(function() {
 	}
 
 	function onWindowResize(event) {
-		var width = window.innerWidth;
+		currentWidth = window.innerWidth;
+		currentHeight = window.innerHeight - 115;
 		if (window.innerWidth > window.innerHeight * 1.3) {
-			var width = window.innerHeight * 1.3;
+			currentWidth = window.innerHeight * 1.3 - 20;
 		}
-		renderer.setSize(width - 20, window.innerHeight - 115);
+		camera.aspect = currentWidth / currentHeight;
+    camera.updateProjectionMatrix();
+		renderer.setSize(currentWidth, currentHeight);
 	}
 
 	function animate() {
@@ -93,7 +97,6 @@ $(function() {
 		updateGrid(world);
 	}
 
-
 	function updateGrid(world) {
 		for (var x = 0; x < world.tiles_width; x++) {
 			for (var y = 0; y < world.tiles_height; y++) {
@@ -103,7 +106,6 @@ $(function() {
 			}
 		}
 	}
-
 
 	function resetGrid(world) {
 		grid = new Array([world.tiles_width]);
