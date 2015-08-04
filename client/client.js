@@ -21,7 +21,7 @@ $(function() {
   function connect() {
     host = 'ws://' + $host.val() + ':3000';
     console.log("Connecting to:", host);
-    socket = io(host);
+    socket = io();
     showConnectionStatus();
   }
 
