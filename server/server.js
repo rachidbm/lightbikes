@@ -30,13 +30,14 @@ var skipLoop = false;
 
 // Main loop, will be called every 'X' time, see startLoop()
 function loop() {
-  if(skipLoop) {
+  if(skipLoop || world.getTotalPlayers() < 1) {
     return;
   }
   world.movePlayers();
   // Is there winner?
   if(world.restartWhenAllPlayersDied()) {
     skipLoop = true;
+    world.restart();
     restartGame(world, 3);
   } else {
     skipLoop = false;
@@ -121,7 +122,7 @@ io.on('connection', function(socket) {
 
 
 var restartGame = function(world, seconds) {
-  console.log('restartGame:', seconds);
+  console.log('Start new game in:', seconds);
   if(seconds > 0) {
     io.emit('countdown', {
       seconds: seconds
@@ -131,7 +132,7 @@ var restartGame = function(world, seconds) {
     }, 1000);
   } else {
     skipLoop = false;
-    world.restart();
+    world.pause(false);
   }
 };
 

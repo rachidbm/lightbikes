@@ -45,6 +45,7 @@ World.prototype.restart = function() {
 		p.alive = true;
 		this.addPlayer(p);
 	}
+	this.paused = true;
 	this.onWorldRestart();
 };
 
@@ -141,6 +142,10 @@ World.prototype.getTotalPlayers = function(player) {
 
 World.prototype.togglePause = function() {
 	this.paused = !this.paused;
+};
+
+World.prototype.pause = function(paused) {
+	this.paused = paused;
 };
 
 World.prototype.removePlayer = function(player_id) {
