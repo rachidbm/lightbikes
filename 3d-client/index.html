@@ -19,8 +19,13 @@
   		/*background-color: #00344C;*/
 			/*width: 100%;*/
 		}
+		#footer {
+			float: left;
+			width:250px;
+		}
 		#settings {
 			float:left;
+
 		}		
 		#controls {
 			float: left;
@@ -44,17 +49,6 @@
 	</div>
 
 	<div id="footer">
-	  <div id="settings">
-	    <!-- Server: <input type="text" id="host" value="localhost" />
-	    <input type="button" id="connect" value="Connect" /> -->
-	    <br />
-	  	Space = start and pause<br />
-	  	Play with: UP, DOWN, LEFT, RIGT <br />
-	  	r = restart <br />
-	  	c = reset camera view <br />
-	  	mouse click and drag to move camera view<br />
-	  </div>
-
 	  <div id="controls"> 
 	  	&nbsp;&nbsp;&nbsp;
 	  	<input type="button" id="up" value="up" onclick="$(window).trigger($.Event('keydown', {keyCode: 38})); " />
@@ -70,6 +64,15 @@
 	  	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	  	<input type="button" id="restart" value="restart" onclick="$(window).trigger($.Event('keydown', {keyCode: 82})); " />
 	  </div>	
+	  <div id="settings">
+	    <br />
+	  	Space = start and pause<br />
+	  	Play with: UP, DOWN, LEFT, RIGT <br />
+	  	r = restart <br />
+	  	c = reset camera view <br />
+	  	mouse click and drag to move camera view<br />
+	  </div>
+
   	<div id="stats" />
 	</div>
 

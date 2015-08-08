@@ -25,8 +25,8 @@ $(function() {
 		window.addEventListener('resize', onWindowResize, false);
 
 		document.getElementById('world').appendChild(renderer.domElement);
-		stats = new Stats();
-		document.getElementById('stats').appendChild(stats.domElement);
+		// stats = new Stats();
+		// document.getElementById('stats').appendChild(stats.domElement);
 
 		initScene();
 		onWindowResize(); // Sets size of renderer
@@ -84,7 +84,7 @@ $(function() {
 		requestAnimationFrame(animate);
 		renderer.render(scene, camera);
 		controls.update();
-		stats.update();
+		// stats.update();
 	}
 
 	function setupWorld(world) {
