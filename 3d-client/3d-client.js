@@ -11,7 +11,15 @@ $(function() {
 
 	var camera, scene, renderer, plane, controls, grid,
 		currentWidth = window.innerWidth,
-		currentHeight = window.innerHeight;
+		currentHeight = window.innerHeight,
+		textMesh,
+		textOptions = {
+			font: 'helvetiker',
+			size: 30,
+			curveSegments: 20,
+			style: 'normal'
+		};
+
 
 	init();
 	animate();
@@ -64,9 +72,32 @@ $(function() {
 		var starSky = new THREE.Mesh(geometry, material);
 		scene.add(starSky);
 
-		// Default plane
-		// plane = new Plane(50, 50);
-		// scene.add(plane.getMesh());
+		// Countdown text
+		var text = '';
+		var textShape = new THREE.ShapeGeometry(THREE.FontUtils.generateShapes(text, textOptions));
+		var textMaterial = new THREE.MeshLambertMaterial({
+			color: 0x0000ff,
+			transparent: true,
+			side: THREE.DoubleSide
+		});
+		textMesh = new THREE.Mesh(textShape, textMaterial);
+		textMesh.position.set(-10, 1, 20);
+		textMesh.rotation.x = -Math.PI / 3;
+		scene.add(textMesh);
+	}
+
+	function setCountdownText(text) {
+		var textShape = new THREE.ShapeGeometry(THREE.FontUtils.generateShapes(text, textOptions));
+		textMesh.geometry = textShape;
+		textMesh.material.opacity = 0.8;
+		
+		// Fade out
+		var id = setInterval(function() {
+			if(textMesh.material.opacity < 0) {
+				clearInterval(id);
+			}
+      textMesh.material.opacity -= 0.05;
+    }, 200);
 	}
 
 	function onWindowResize(event) {
@@ -76,7 +107,7 @@ $(function() {
 			currentWidth = window.innerHeight * 1.3 - 20;
 		}
 		camera.aspect = currentWidth / currentHeight;
-    camera.updateProjectionMatrix();
+		camera.updateProjectionMatrix();
 		renderer.setSize(currentWidth, currentHeight);
 	}
 
@@ -166,7 +197,7 @@ $(function() {
 
 
 
-var playerId = null;
+	var playerId = null;
 	/*
 
 	Connection with Server
@@ -216,8 +247,8 @@ var playerId = null;
 		updateGrid(data.world);
 	});
 
-	socket.on('countdown', function(seconds) {
-		console.log('countdown:', seconds);
+	socket.on('countdown', function(countdown) {
+		setCountdownText(countdown.seconds);
 	});
 
 	socket.on('connect_error', function(error) {

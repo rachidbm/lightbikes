@@ -23,7 +23,7 @@ server.listen(port, function() {
   console.log('Server listening at %s:%s', host, port);
   console.log("Settings; ", C);
   world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE, onWorldRestart);
-  startLoop();
+  setInterval(loop, C.TICK_TIME);
 });
 
 var skipLoop = false;
@@ -136,7 +136,3 @@ var restartGame = function(world, seconds) {
   }
 };
 
-var startLoop = function() {
-  setTimeout(startLoop, C.TICK_TIME);
-  loop();
-};
