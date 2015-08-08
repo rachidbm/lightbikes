@@ -41,7 +41,7 @@ $(function() {
 		camera.position.z = 100;
 		scene.add(camera);
 
-		controls = new THREE.TrackballControls(camera);
+		controls = new THREE.TrackballControls(camera, world);
 		controls.rotateSpeed = 1.0;
 		controls.zoomSpeed = 1.2;
 		controls.panSpeed = 0.8;
@@ -200,6 +200,7 @@ var playerId = null;
 		// console.log("Connected to server, got ID: ", playerId);
 		showConnectionStatus();
 		console.log("I am: ", data.world.players[playerId]);
+		socket.emit("message", "My screen size is: " + currentWidth + " x " + currentHeight);
 		setupWorld(data.world);
 	});
 
@@ -233,7 +234,6 @@ var playerId = null;
 		for (var i = 0; i < filenames.length; i++) {
 			console.log("Loading: ", filenames[i]);
 			var fileref = document.createElement('script');
-			// fileref.setAttribute("type", "text/javascript");
 			fileref.setAttribute("src", filenames[i]);
 			if (typeof fileref !== "undefined") {
 				document.getElementsByTagName("head")[0].appendChild(fileref);
