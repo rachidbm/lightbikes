@@ -11,6 +11,7 @@ var World = require("./world.js");
 var C = require("./config");
 
 var world;
+var countingDown = false;
 
 // Routing
 app.use(express.static(__dirname + '/../3d-client'));
@@ -26,27 +27,44 @@ server.listen(port, function() {
   setInterval(loop, C.TICK_TIME);
 });
 
-var skipLoop = false;
 
-// Main loop, will be called every 'X' time, see startLoop()
+// Main loop, will be called every 'X' time, see C.TICK_TIME
 function loop() {
-  if(skipLoop || world.getTotalPlayers() < 1) {
+  if(countingDown || world.getTotalPlayers() < 1) {
     return;
   }
   world.movePlayers();
-  // Is there winner?
   if(world.restartWhenAllPlayersDied()) {
-    skipLoop = true;
-    world.restart();
-    restartGame(world, 3);
+    startNewGame(world, 3);
   } else {
-    skipLoop = false;
+    countingDown = false;
     io.emit('render', {
       totalPlayers: world.getTotalPlayers(),
       world: world
     });
   }
 }
+
+var startNewGame = function(world, seconds) {
+  world.restart();
+  countingDown = true;
+  var intervalId = setInterval(function() {
+    if(seconds > 0) {
+      console.log('Start new game in:', seconds);
+      io.emit('countdown', {
+        seconds: seconds 
+      });
+      seconds--;
+    } else {
+      clearInterval(intervalId);
+      countingDown = false;
+      // Start the game!
+      world.pause(false);
+    }
+  }, 1000);
+
+};
+
 
 function clientConnected(socket) {
   var player = world.createPlayer();
@@ -77,7 +95,7 @@ io.on('connection', function(socket) {
 
 
   socket.on('restart', function() {
-    world.restart();
+    startNewGame(world, 3);
   });
 
   socket.on('toggle pause', function() {
@@ -119,20 +137,4 @@ io.on('connection', function(socket) {
   });
 
 });
-
-
-var restartGame = function(world, seconds) {
-  console.log('Start new game in:', seconds);
-  if(seconds > 0) {
-    io.emit('countdown', {
-      seconds: seconds
-    });
-    setTimeout(function() {
-      restartGame(world, seconds - 1)
-    }, 1000);
-  } else {
-    skipLoop = false;
-    world.pause(false);
-  }
-};
 
