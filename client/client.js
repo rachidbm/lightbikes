@@ -129,6 +129,15 @@ $(function() {
     logClients(data);
   });
 
+  socket.on('restart', function(data) {
+    console.log("Restarted by ", data.player);
+    render(data.world);
+  });
+
+  socket.on('countdown', function(seconds) {
+    console.log('countdown:', seconds);
+  });
+
   socket.on('connect_error', function(error) {
     console.log('Failed connecting to:', host, error);
   });

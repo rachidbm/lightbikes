@@ -6,6 +6,7 @@
   "private": true,
   "license": "GPL",
   "dependencies": {
+    "socket.io": "1.3.5",
     "n3d-threejs": "70.0",
     "threex.oimo": "1.0.0",
     "threejs-examples": "60.0"
