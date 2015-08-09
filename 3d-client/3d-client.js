@@ -51,8 +51,8 @@ $(function() {
 		scene.add(camera);
 
 		controls = new THREE.TrackballControls(camera, world);
-		controls.rotateSpeed = 1.0;
-		controls.zoomSpeed = 1.2;
+		controls.rotateSpeed = 0.4;
+		controls.zoomSpeed = 0.8;
 		controls.panSpeed = 0.8;
 		controls.noZoom = false;
 		controls.noPan = false;
