@@ -4,8 +4,6 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
 var host = process.env.HOST || 'localhost';
-var util = require('util');
-var uuid = require('uuid');
 var Player = require("./player.js");
 var World = require("./world.js");
 var C = require("./config");
@@ -33,7 +31,7 @@ function loop() {
   if(countingDown || world.getTotalPlayers() < 1) {
     return;
   }
-  world.movePlayers();
+  world.update();
   if(world.restartWhenAllPlayersDied()) {
     startNewGame(world, 3);
   } else {

@@ -1,6 +1,6 @@
 module.exports = World;
 
-var uuid = require('uuid');
+var Uuid = require('uuid');
 var Player = require("./player.js");
 
 
@@ -63,7 +63,7 @@ World.prototype.restartWhenAllPlayersDied = function() {
 	return playerAlive === null;
 };
 
-World.prototype.movePlayers = function(player) {
+World.prototype.update = function(player) {
 	if (this.paused) {
 		return;
 	}
@@ -73,14 +73,14 @@ World.prototype.movePlayers = function(player) {
 		if (!p.alive) {
 			continue;
 		}
-		p.move();
-		if (p.x < 0 || p.y < 0 || p.x >= this.grid.length || p.y >= this.grid[p.x].length) {
+		var nextPos = p.calcNextPosition();
+		if (nextPos.x < 0 || nextPos.y < 0 || nextPos.x >= this.grid.length || nextPos.y >= this.grid[nextPos.x].length) {
 			// Player collide with wall!
 			p.die();
 			if (this.restartWhenAllPlayersDied()) {
 				return;
 			}
-		} else if (this.grid[p.x][p.y] !== null) {
+		} else if (this.grid[nextPos.x][nextPos.y] !== null) {
 			// Someone was already here
 			p.die();
 			if (this.restartWhenAllPlayersDied()) {
@@ -88,13 +88,14 @@ World.prototype.movePlayers = function(player) {
 			}
 		} else {
 			// Set player to new position on grid
-			this.grid[p.x][p.y] = p.color;
+			p.setPostion(nextPos.x, nextPos.y);
+			this.grid[nextPos.x][nextPos.y] = p.color;
 		}
 	}
 };
 
 World.prototype.createPlayer = function() {
-	var player = new Player(uuid.v4(), getNextColor(), this.tileSize);
+	var player = new Player(Uuid.v4(), getNextColor(), this.tileSize);
 	this.addPlayer(player);
 	return player;
 };
@@ -152,11 +153,6 @@ World.prototype.removePlayer = function(player_id) {
 	delete this.players[player_id];
 };
 
-
-function addRandomPlayer() {
-	var player = new Player(uuid.v4(), getNiceColor(), C.PLAYER.SIZE);
-	addPlayer(player);
-};
 
 
 var COLORS = [

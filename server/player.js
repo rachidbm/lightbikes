@@ -13,7 +13,6 @@ function Player(id, color, size, x, y) {
 }
 
 Player.prototype.die = function() {
-	console.log(this.id + " died");
 	this.alive = false;
 };
 
@@ -41,26 +40,35 @@ Player.prototype.left = function() {
 	}
 };
 
-
-Player.prototype.move = function() {
+Player.prototype.setPostion = function(x, y) {
 	if (!this.alive) {
 		return;
 	}
+	this.x = x;
+	this.y = y;
+};
 
-	// var step = this.size;
-	var step = 1;
-	switch (this.direction) {
-		case C.DIRECTION.UP:
-			this.y -= step;
-			break;
-		case C.DIRECTION.RIGHT:
-			this.x += step;
-			break;
-		case C.DIRECTION.DOWN:
-			this.y += step;
-			break;
-		case C.DIRECTION.LEFT:
-			this.x -= step;
-			break;
-	}
+Player.prototype.calcNextPosition = function() {
+  var x = this.x,
+		y = this.y;
+
+  var step = 1;
+  switch (this.direction) {
+    case C.DIRECTION.UP:
+      y -= step;
+      break;
+    case C.DIRECTION.RIGHT:
+      x += step;
+      break;
+    case C.DIRECTION.DOWN:
+      y += step;
+      break;
+    case C.DIRECTION.LEFT:
+      x -= step;
+      break;
+  }
+  return {
+    x: x,
+    y: y
+  };
 };
