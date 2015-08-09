@@ -46,16 +46,23 @@ function loop() {
 }
 
 var startNewGame = function(world, seconds) {
+  if(countingDown) {
+    // Already starting a new Game.
+    return;
+  }
   world.restart();
   countingDown = true;
   var intervalId = setInterval(function() {
     if(seconds > 0) {
-      console.log('Start new game in:', seconds);
+      // console.log('Start new game in:', seconds);
       io.emit('countdown', {
         seconds: seconds 
       });
       seconds--;
     } else {
+      io.emit('countdown', {
+        seconds: 'GO'
+      });
       clearInterval(intervalId);
       countingDown = false;
       // Start the game!

@@ -15,11 +15,12 @@ $(function() {
 		textMesh,
 		textOptions = {
 			font: 'helvetiker',
-			size: 30,
-			curveSegments: 20,
+			size: 20,
+			// curveSegments: 20,
 			style: 'normal'
 		};
-
+	var playerId;
+	var player;
 
 	init();
 	animate();
@@ -81,7 +82,7 @@ $(function() {
 			side: THREE.DoubleSide
 		});
 		textMesh = new THREE.Mesh(textShape, textMaterial);
-		textMesh.position.set(-10, 1, 20);
+		textMesh.position.set(-12, 1, 12);	
 		textMesh.rotation.x = -Math.PI / 3;
 		scene.add(textMesh);
 	}
@@ -128,17 +129,6 @@ $(function() {
 		updateGrid(world);
 	}
 
-	function updateGrid(world) {
-		for (var x = 0; x < world.tiles_width; x++) {
-			for (var y = 0; y < world.tiles_height; y++) {
-				if (world.grid[x][y] !== null && grid[x][y] === null) {
-					addCube(x, y, world.grid[x][y]);
-				}
-			}
-		}
-		// TODO highlight current position
-	}
-
 	function resetGrid(world) {
 		grid = new Array([world.tiles_width]);
 		for (var x = 0; x < world.tiles_width; x++) {
@@ -147,9 +137,19 @@ $(function() {
 				grid[x][y] = null;
 			}
 		}
-		// console.log("Created new grid of", world.tiles_width, "x", world.tiles_height, "tiles");
 	}
 
+	function updateGrid(world) {
+		for (var x = 0; x < world.tiles_width; x++) {
+			for (var y = 0; y < world.tiles_height; y++) {
+				if (world.grid[x][y] !== null && grid[x][y] === null) {
+					addCube(x, y, world.grid[x][y]);
+				}
+			}
+		}
+		player = world.players[playerId];
+		plane.setPlayerPosition(player.x, player.y, player.color);
+	}
 
 	function addCube(x, y, color) {
 		if (grid[x][y] !== null) {
@@ -197,7 +197,7 @@ $(function() {
 
 
 
-	var playerId = null;
+	
 	/*
 
 	Connection with Server
@@ -237,8 +237,6 @@ $(function() {
 
 	socket.on('restart', function(data) {
 		console.log("Restarted by ", data.player);
-		var p = data.world.players[playerId];
-		// console.log("I'm standing on: ", p.x, p.y);
 		initScene();
 		setupWorld(data.world);
 	});

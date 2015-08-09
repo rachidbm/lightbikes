@@ -4,8 +4,8 @@ function Plane(width, height) {
 
 	this.offsetX = width / 2 - 0.5;
 	this.offsetY = height / 2 - 0.5;
+	this.playerMesh = null;
 	this.initPlane();
-
 }
 
 Plane.prototype.initPlane = function() {
@@ -55,14 +55,27 @@ Plane.prototype.initLines = function() {
 };
 
 
+Plane.prototype.setPlayerPosition = function(x, y, color) {
+	if(this.playerMesh === null) {
+		var geometry = new THREE.SphereGeometry(0.5, 32, 32);
+		var material = new THREE.MeshPhongMaterial({
+			color: color
+		});
+		this.playerMesh = new THREE.Mesh(geometry, material);
+		this.plane.add(this.playerMesh);
+	}
+	this.playerMesh.position.set(x - this.offsetX, y - this.offsetY, -2.5);
+};
+
+
 Plane.prototype.addCube = function(x, y, color) {
-	var geometry = new THREE.BoxGeometry(1, 1, 1);
+	var geometry = new THREE.BoxGeometry(1, 1, 2);
 	var material = new THREE.MeshPhongMaterial({
 		color: color
 	});
 	cube = new THREE.Mesh(geometry, material);
 	var cube = new THREE.Mesh(geometry, material);
-	cube.position.set(x - this.offsetX, y - this.offsetY, -0.5);
+	cube.position.set(x - this.offsetX, y - this.offsetY, -1.0);
 	this.plane.add(cube);
 };
 
