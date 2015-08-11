@@ -2,7 +2,7 @@
 var express = require('express');
 var Player = require("./player.js");
 var World = require("./world.js");
-var Game = require("./game.js");
+var Gameserver = require("./gameserver.js");
 var C = require("./config");
 var port = process.env.PORT || 3000;
 var host = process.env.HOST || 'localhost';
@@ -30,7 +30,7 @@ server.listen(port, function() {
   console.log('Server listening at %s:%s', host, port);
   console.log("Settings; ", C);
   // world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE, onWorldRestart);
-  game = new Game();
+  game = new Gameserver();
 
   game.on('started', function() { 
     console.log('A new game is started');
@@ -56,10 +56,9 @@ server.listen(port, function() {
 });
 
 
-
 io.on('connection', function(socket) {
 
-  var player = game.world.createPlayer();
+  var player = game.world.createPlayer(); // TODO Add player to game. Only on new game it's added to world
   socket.userId = player.id;
 
   socket.emit('connected', {
