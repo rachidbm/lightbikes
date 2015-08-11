@@ -41,13 +41,17 @@ Game.prototype.createPlayer = function() {
   this.players[player.id] = player;
   if(this.getTotalPlayers() < 2) {
     this.restart();
+  }else if(C.DIRECTLY_JOIN_GAME) {
+    this.world.addPlayer(player);
   }
   return player;
 };
 
 
 Game.prototype.removePlayer = function(player_id) {
-  this.world.removePlayer(player_id);
+  if(C.DIRECTLY_LEAVE_GAME) {
+    this.world.removePlayer(player_id);
+  }
   delete this.players[player_id];
 };
 

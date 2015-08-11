@@ -13,7 +13,9 @@ var CONFIG = {
     RIGHT: 2,
     DOWN: 3,
     LEFT: 4
-  }
+  },
+  DIRECTLY_JOIN_GAME: true,   // Directly join current game when connected
+  DIRECTLY_LEAVE_GAME: true
 };
 
 module.exports = CONFIG;
