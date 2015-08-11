@@ -4,6 +4,7 @@ var express = require('express');
 var Player = require("./player.js");
 var World = require("./world.js");
 var Gameserver = require("./gameserver.js");
+var GameHistory = require("./gamehistory.js");
 var C = require("./config");
 var port = process.env.PORT || 3000;
 var host = process.env.HOST || 'localhost';
@@ -12,7 +13,7 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
-var game;
+var game, gamehistory;
 
 // Routing
 app.use(express.static(__dirname + '/../3d-client'));
@@ -32,14 +33,7 @@ server.listen(port, function() {
   console.log("Settings; ", C);
   // world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE, onWorldRestart);
   game = new Gameserver();
-
-  game.on('started', function() { 
-    // console.log('A new game is started');
-  });
-
-  game.on('finished', function() { 
-    console.log('Game is finished');
-  });
+  gamehistory = new GameHistory(game);
 
   game.on('restart', function(data) { 
     io.emit('restart', data);

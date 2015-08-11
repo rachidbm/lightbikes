@@ -2,7 +2,6 @@
 
 var Uuid = require('uuid');
 var util = require('util');
-// var inherits = require('util').inherits;
 var EventEmitter = require('events').EventEmitter;
 var C = require("./config");
 var World = require("./world.js");
@@ -12,6 +11,7 @@ var Player = require("./player.js");
 Game.prototype.__proto__ = EventEmitter.prototype; // extends  EventEmitter
 
 function Game() {
+  this.currentGameId = Uuid.v4();
   this.world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE);
   this.countingDown = false;
   this.players = {};
@@ -84,7 +84,7 @@ Game.prototype.restart = function() {
   if(this.countingDown) {
     return;
   }
-  this.startNewGame(3);
+  this.startNewGame(C.COUNTDOWN_SECS);
 };
 
 
@@ -100,7 +100,7 @@ Game.prototype.startNewGame = function(seconds) {
   this.emit('restart', {
     world: this.world
   });
-
+  this.currentGameId = Uuid.v4();
   this.startAfterCountdown(seconds);
 };
 
@@ -121,7 +121,7 @@ Game.prototype.startAfterCountdown = function(seconds) {
         clearInterval(intervalId);
         _this.countingDown = false;
         // Start the game!
-        _this.emit('started');
+        _this.emit('started', _this.currentGameId);
         _this.world.pause(false);
       }   
   }, 1000);

@@ -14,6 +14,7 @@ var CONFIG = {
     DOWN: 3,
     LEFT: 4
   },
+  COUNTDOWN_SECS: 3,
   DIRECTLY_JOIN_GAME: true,   // Directly join current game when connected
   DIRECTLY_LEAVE_GAME: true
 };
