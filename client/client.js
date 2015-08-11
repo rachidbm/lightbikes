@@ -58,7 +58,7 @@ $(function() {
 
 
   function logClients(data) {
-    var msg = "clients: " + data.totalPlayers;
+    var msg = "clients: " + Object.keys(data.world.players).length;
     if (data.world.paused) {
       msg += "   (paused) ";
     }

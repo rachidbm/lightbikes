@@ -1,13 +1,15 @@
 var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
-var port = process.env.PORT || 3000;
-var host = process.env.HOST || 'localhost';
 var Player = require("./player.js");
 var World = require("./world.js");
 var Game = require("./game.js");
 var C = require("./config");
+
+var port = process.env.PORT || 3000;
+var host = process.env.HOST || 'localhost';
+
+var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
 
 var game;
 
@@ -22,7 +24,11 @@ server.listen(port, function() {
   console.log('Server listening at %s:%s', host, port);
   console.log("Settings; ", C);
   // world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE, onWorldRestart);
-  game = new Game(io, onWorldRestart);
+  game = new Game(io, function onWorldRestart() {
+    io.emit('restart', {
+      world: game.world
+    });
+  });
   setInterval(loop, C.TICK_TIME);
 });
 
@@ -33,12 +39,6 @@ function loop() {
 }
 
 
-function onWorldRestart() {
-  io.emit('restart', {
-    world: game.world
-  });
-}
-
 io.on('connection', function(socket) {
 
   var player = game.world.createPlayer();
@@ -46,19 +46,16 @@ io.on('connection', function(socket) {
 
   socket.emit('connected', {
     id: player.id,
-    totalPlayers: game.world.getTotalPlayers(),
     world: game.world
   });
 
   socket.broadcast.emit('user joined', {
     player: socket.userId,
-    totalPlayers: game.world.getTotalPlayers(),
     world: game.world
   });
 
-
   socket.on('restart', function() {
-    game.startNewGame(3);
+    game.restart();
   });
 
   socket.on('toggle pause', function() {
@@ -76,7 +73,6 @@ io.on('connection', function(socket) {
 
     socket.broadcast.emit('user left', {
       player: socket.userId,
-      totalPlayers: game.world.getTotalPlayers(),
       world: game.world
     });
   });
