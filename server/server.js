@@ -1,9 +1,9 @@
+"use strict";
 var express = require('express');
 var Player = require("./player.js");
 var World = require("./world.js");
 var Game = require("./game.js");
 var C = require("./config");
-
 var port = process.env.PORT || 3000;
 var host = process.env.HOST || 'localhost';
 
@@ -19,6 +19,12 @@ app.use('/3d', express.static(__dirname + '/../3d-client'));
 app.use('/2d', express.static(__dirname + '/../client'));
 
 
+// Main loop, will be called every 'X' time, see C.TICK_TIME
+function loop() {
+  game.update();
+}
+
+
 // Startup 
 server.listen(port, function() {
   console.log('Server listening at %s:%s', host, port);
@@ -32,11 +38,6 @@ server.listen(port, function() {
   setInterval(loop, C.TICK_TIME);
 });
 
-
-// Main loop, will be called every 'X' time, see C.TICK_TIME
-function loop() {
-  game.update();
-}
 
 
 io.on('connection', function(socket) {

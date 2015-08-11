@@ -1,4 +1,4 @@
-module.exports = Player;
+"use strict";
 
 var C = require("./config");
 
@@ -17,25 +17,25 @@ Player.prototype.die = function() {
 };
 
 Player.prototype.up = function() {
-	if (this.direction != C.DIRECTION.DOWN) {
+	if (this.direction !== C.DIRECTION.DOWN) {
 		this.direction = C.DIRECTION.UP;
 	}
 };
 
 Player.prototype.right = function() {
-	if (this.direction != C.DIRECTION.LEFT) {
+	if (this.direction !== C.DIRECTION.LEFT) {
 		this.direction = C.DIRECTION.RIGHT;
 	}
 };
 
 Player.prototype.down = function() {
-	if (this.direction != C.DIRECTION.UP) {
+	if (this.direction !== C.DIRECTION.UP) {
 		this.direction = C.DIRECTION.DOWN;
 	}
 };
 
 Player.prototype.left = function() {
-	if (this.direction != C.DIRECTION.RIGHT) {
+	if (this.direction !== C.DIRECTION.RIGHT) {
 		this.direction = C.DIRECTION.LEFT;
 	}
 };
@@ -72,3 +72,6 @@ Player.prototype.calcNextPosition = function() {
     y: y
   };
 };
+
+
+module.exports = Player;

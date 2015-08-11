@@ -1,24 +1,23 @@
-module.exports = Game;
+"use strict";
 
 var Uuid = require('uuid');
 var C = require("./config");
 var World = require("./world.js");
 var Player = require("./player.js");
 
-
 function Game(io, onWorldRestart) {
 	this.world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE, onWorldRestart);
 	this.countingDown = false;
-	this.io = io;		// TODO Remove this.io
+	this.io = io;
 }
 
-Game.prototype.update = function(player) {
+Game.prototype.update = function() {
 	if(this.countingDown || this.world.getTotalPlayers() < 1) {
     return;
   }
 	this.world.update();
 
-  if(this.world.restartWhenAllPlayersDied()) {
+  if(this.world.allPlayersDied()) {
     this.startNewGame(3);
   } else {
     this.countingDown = false;
@@ -56,7 +55,7 @@ Game.prototype.togglePause = function() {
 
 Game.prototype.restart = function() {
   this.startNewGame(3);
-}
+};
 
 
 Game.prototype.startNewGame = function(seconds) {
@@ -69,11 +68,10 @@ Game.prototype.startNewGame = function(seconds) {
   var _this = this;
   var intervalId = setInterval(function() {
 	   if(seconds > 0) {
-	      // console.log('Start new game in:', seconds);
 	      _this.io.emit('countdown', {
 	        seconds: seconds
 	      });
-	      seconds--;
+	      seconds -= 1;
 	    } else {
 	      _this.io.emit('countdown', {
 	        seconds: 'GO'
@@ -85,3 +83,6 @@ Game.prototype.startNewGame = function(seconds) {
 	    }  	
   }, 1000);
 };
+
+
+module.exports = Game;

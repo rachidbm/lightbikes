@@ -1,4 +1,4 @@
-module.exports = World;
+"use strict";
 
 var Uuid = require('uuid');
 var Player = require("./player.js");
@@ -27,9 +27,10 @@ function World(width, height, tileSize, onWorldRestart) {
 }
 
 World.prototype.resetGrid = function() {
-	for (var x = 0; x < this.tiles_width; x++) {
+	var x, y;
+	for (x = 0; x < this.tiles_width; x++) {
 		this.grid[x] = new Array([this.tiles_height]);
-		for (var y = 0; y < this.tiles_height; y++) {
+		for (y = 0; y < this.tiles_height; y++) {
 			this.grid[x][y] = null;
 		}
 	}
@@ -38,9 +39,10 @@ World.prototype.resetGrid = function() {
 
 
 World.prototype.restart = function() {
+	var id, p;
 	this.resetGrid();
-	for (var id in this.players) {
-		var p = this.players[id];
+	for (id in this.players) {
+		p = this.players[id];
 		p.alive = true;
 		this.addPlayer(p);
 	}
@@ -48,41 +50,40 @@ World.prototype.restart = function() {
 	this.onWorldRestart();
 };
 
-World.prototype.restartWhenAllPlayersDied = function() {
-	var playerAlive = null;
-	for (var id in this.players) {
-		var p = this.players[id];
+World.prototype.allPlayersDied = function() {
+	var id, p, playerAlive = null;
+	for (id in this.players) {
+		p = this.players[id];
 		if (p.alive) {
 			playerAlive = p;
-			// return false;
 			break;
 		}
 	}
-	// this.restart();
 	return playerAlive === null;
 };
 
-World.prototype.update = function(player) {
+World.prototype.update = function() {
 	if (this.paused) {
 		return;
 	}
+	var id, p, nextPos;
 
-	for (var id in this.players) {
-		var p = this.players[id];
+	for (id in this.players) {
+		p = this.players[id];
 		if (!p.alive) {
 			continue;
 		}
-		var nextPos = p.calcNextPosition();
+		nextPos = p.calcNextPosition();
 		if (nextPos.x < 0 || nextPos.y < 0 || nextPos.x >= this.grid.length || nextPos.y >= this.grid[nextPos.x].length) {
 			// Player collide with wall!
 			p.die();
-			if (this.restartWhenAllPlayersDied()) {
+			if (this.allPlayersDied()) {
 				return;
 			}
 		} else if (this.grid[nextPos.x][nextPos.y] !== null) {
 			// Someone was already here
 			p.die();
-			if (this.restartWhenAllPlayersDied()) {
+			if (this.allPlayersDied()) {
 				return;
 			}
 		} else {
@@ -102,7 +103,7 @@ World.prototype.createPlayer = function() {
 World.prototype.addPlayer = function(player) {
 	// Initial direction is random
 	player.direction = Math.floor((Math.random() * 4)) + 1;
-	position = this.randomEmptyPosition();
+	var position = this.randomEmptyPosition();
 	if (position !== null) {
 		player.x = position.x;
 		player.y = position.y;
@@ -136,7 +137,7 @@ World.prototype.randomEmptyPosition = function() {
 	return null;
 };
 
-World.prototype.getTotalPlayers = function(player) {
+World.prototype.getTotalPlayers = function() {
 	return Object.keys(this.players).length;
 };
 
@@ -167,3 +168,6 @@ function getNextColor() {
 	currentColorIndex++;
 	return COLORS[currentColorIndex % COLORS.length];
 }
+
+
+module.exports = World;
