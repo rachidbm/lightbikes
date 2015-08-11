@@ -1,15 +1,20 @@
 "use strict";
 
 var Uuid = require('uuid');
+var util = require('util');
+// var inherits = require('util').inherits;
+var EventEmitter = require('events').EventEmitter;
 var C = require("./config");
 var World = require("./world.js");
 var Player = require("./player.js");
 
-function Game(io, onWorldRestart) {
-	this.world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE, onWorldRestart);
-	this.countingDown = false;
-	this.io = io;
+Game.prototype.__proto__ = EventEmitter.prototype; // extends  EventEmitter
+
+function Game() {
+  this.world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE);
+  this.countingDown = false;
 }
+
 
 Game.prototype.update = function() {
 	if(this.countingDown || this.world.getTotalPlayers() < 1) {
@@ -21,7 +26,7 @@ Game.prototype.update = function() {
     this.startNewGame(3);
   } else {
     this.countingDown = false;
-    this.io.emit('render', {
+    this.emit('update', {
       totalPlayers: this.world.getTotalPlayers(),
       world: this.world
     });
@@ -54,6 +59,7 @@ Game.prototype.togglePause = function() {
 
 
 Game.prototype.restart = function() {
+  // finished
   this.startNewGame(3);
 };
 
@@ -64,25 +70,30 @@ Game.prototype.startNewGame = function(seconds) {
     return;
   }
   this.world.restart();
+  this.emit('restart', {
+    world: this.world
+  });
+
+  
   this.countingDown = true;
   var _this = this;
   var intervalId = setInterval(function() {
 	   if(seconds > 0) {
-	      _this.io.emit('countdown', {
+	      _this.emit('countdown', {
 	        seconds: seconds
 	      });
 	      seconds -= 1;
 	    } else {
-	      _this.io.emit('countdown', {
+	      _this.emit('countdown', {
 	        seconds: 'GO'
 	      });
 	      clearInterval(intervalId);
 	      _this.countingDown = false;
 	      // Start the game!
+        _this.emit('started');
 	      _this.world.pause(false);
 	    }  	
   }, 1000);
 };
-
 
 module.exports = Game;

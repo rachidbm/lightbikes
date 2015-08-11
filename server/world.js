@@ -4,7 +4,7 @@ var Uuid = require('uuid');
 var Player = require("./player.js");
 
 
-function World(width, height, tileSize, onWorldRestart) {
+function World(width, height, tileSize) {
 	this.width = width;
 	this.height = height;
 	this.tileSize = tileSize;
@@ -16,7 +16,6 @@ function World(width, height, tileSize, onWorldRestart) {
 		throw ("ERROR: WORLD.HEIGHT should be a multiple of tileSize");
 	}
 	this.players = {};
-	this.onWorldRestart = onWorldRestart;
 
 	this.tiles_width = width / tileSize;
 	this.tiles_height = height / tileSize;
@@ -37,7 +36,7 @@ World.prototype.resetGrid = function() {
 	console.log("Created new grid of", this.tiles_width, "x", this.tiles_height, "tiles");
 };
 
-
+// TODO: remove restart() method. Should remove instance of World and create a new one and add players..
 World.prototype.restart = function() {
 	var id, p;
 	this.resetGrid();
@@ -47,7 +46,6 @@ World.prototype.restart = function() {
 		this.addPlayer(p);
 	}
 	this.paused = true;
-	this.onWorldRestart();
 };
 
 World.prototype.allPlayersDied = function() {

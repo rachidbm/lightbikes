@@ -30,11 +30,28 @@ server.listen(port, function() {
   console.log('Server listening at %s:%s', host, port);
   console.log("Settings; ", C);
   // world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE, onWorldRestart);
-  game = new Game(io, function onWorldRestart() {
-    io.emit('restart', {
-      world: game.world
-    });
+  game = new Game();
+
+  game.on('started', function() { 
+    console.log('A new game is started');
   });
+
+  game.on('finished', function() { 
+    console.log('Game is finished');
+  });
+
+  game.on('restart', function(data) { 
+    io.emit('restart', data);
+  });
+
+  game.on('update', function(data) { 
+    io.emit('render', data);
+  });
+
+  game.on('countdown', function(data) { 
+    io.emit('countdown', data);
+  });
+
   setInterval(loop, C.TICK_TIME);
 });
 
