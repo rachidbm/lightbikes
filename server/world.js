@@ -27,7 +27,6 @@ function World(width, height, tileSize, onWorldRestart) {
 }
 
 World.prototype.resetGrid = function() {
-	console.log("Reset Grid");
 	for (var x = 0; x < this.tiles_width; x++) {
 		this.grid[x] = new Array([this.tiles_height]);
 		for (var y = 0; y < this.tiles_height; y++) {

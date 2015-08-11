@@ -33,17 +33,6 @@ function loop() {
 }
 
 
-function clientConnected(socket) {
-  var player = game.world.createPlayer();
-  socket.userId = player.id;
-
-  socket.emit('connected', {
-    id: player.id,
-    totalPlayers: game.world.getTotalPlayers(),
-    world: game.world
-  });
-}
-
 function onWorldRestart() {
   io.emit('restart', {
     world: game.world
@@ -52,7 +41,14 @@ function onWorldRestart() {
 
 io.on('connection', function(socket) {
 
-  clientConnected(socket);
+  var player = game.world.createPlayer();
+  socket.userId = player.id;
+
+  socket.emit('connected', {
+    id: player.id,
+    totalPlayers: game.world.getTotalPlayers(),
+    world: game.world
+  });
 
   socket.broadcast.emit('user joined', {
     player: socket.userId,

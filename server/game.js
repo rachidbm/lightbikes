@@ -54,6 +54,11 @@ Game.prototype.togglePause = function() {
 };
 
 
+Game.prototype.restart = function() {
+  this.startNewGame(3);
+}
+
+
 Game.prototype.startNewGame = function(seconds) {
   if(this.countingDown) {
     // Already starting a new Game.
