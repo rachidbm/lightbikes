@@ -8,11 +8,13 @@ var C = require("./config");
 var World = require("./world.js");
 var Player = require("./player.js");
 
+
 Game.prototype.__proto__ = EventEmitter.prototype; // extends  EventEmitter
 
 function Game() {
   this.world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE);
   this.countingDown = false;
+  this.players = {};
 }
 
 
@@ -23,7 +25,7 @@ Game.prototype.update = function() {
 	this.world.update();
 
   if(this.world.allPlayersDied()) {
-    this.startNewGame(3);
+    this.restart();
   } else {
     this.countingDown = false;
     this.emit('update', {
@@ -34,8 +36,24 @@ Game.prototype.update = function() {
 };
 
 
+Game.prototype.createPlayer = function() {
+  var player = new Player(Uuid.v4(), getNextColor(), this.tileSize);
+  this.players[player.id] = player;
+  if(this.getTotalPlayers() < 2) {
+    this.restart();
+  }
+  return player;
+};
+
+
+Game.prototype.removePlayer = function(player_id) {
+  this.world.removePlayer(player_id);
+  delete this.players[player_id];
+};
+
+
 Game.prototype.playerMoved = function(playerId, newDirection) {
-    var p = this.world.players[playerId];
+    var p = this.players[playerId];
     switch (newDirection) {
       case C.DIRECTION.LEFT:
         p.left();
@@ -59,41 +77,71 @@ Game.prototype.togglePause = function() {
 
 
 Game.prototype.restart = function() {
-  // finished
+  if(this.countingDown) {
+    return;
+  }
   this.startNewGame(3);
 };
 
 
 Game.prototype.startNewGame = function(seconds) {
-  if(this.countingDown) {
-    // Already starting a new Game.
-    return;
+  var id;
+  this.world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE);
+  this.world.paused = true;
+  for (id in this.players) {
+    this.players[id].alive = true;
+    this.world.addPlayer(this.players[id]);
   }
-  this.world.restart();
+
   this.emit('restart', {
     world: this.world
   });
 
-  
+  this.startAfterCountdown(seconds);
+};
+
+
+Game.prototype.startAfterCountdown = function(seconds) {
   this.countingDown = true;
   var _this = this;
   var intervalId = setInterval(function() {
-	   if(seconds > 0) {
-	      _this.emit('countdown', {
-	        seconds: seconds
-	      });
-	      seconds -= 1;
-	    } else {
-	      _this.emit('countdown', {
-	        seconds: 'GO'
-	      });
-	      clearInterval(intervalId);
-	      _this.countingDown = false;
-	      // Start the game!
+     if(seconds > 0) {
+        _this.emit('countdown', {
+          seconds: seconds
+        });
+        seconds -= 1;
+      } else {
+        _this.emit('countdown', {
+          seconds: 'GO'
+        });
+        clearInterval(intervalId);
+        _this.countingDown = false;
+        // Start the game!
         _this.emit('started');
-	      _this.world.pause(false);
-	    }  	
+        _this.world.pause(false);
+      }   
   }, 1000);
 };
+
+
+Game.prototype.getTotalPlayers = function() {
+  return Object.keys(this.players).length;
+};
+
+
+var COLORS = [
+  '#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a',
+  '#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2',
+  '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5',
+  '#e21400', '#91580f', '#f8a700', '#f78b00', '#58dc00', '#287b00',
+  '#a8f07a', '#4ae8c4', '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
+];
+var currentColorIndex = 0;
+
+function getNextColor() {
+  currentColorIndex++;
+  return COLORS[currentColorIndex % COLORS.length];
+}
+
 
 module.exports = Game;

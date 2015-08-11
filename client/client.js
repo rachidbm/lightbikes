@@ -135,7 +135,7 @@ $(function() {
   });
 
   socket.on('countdown', function(seconds) {
-    console.log('countdown:', seconds);
+    console.log('Countdown to start:', seconds);
   });
 
   socket.on('connect_error', function(error) {

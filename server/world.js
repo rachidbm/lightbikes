@@ -36,17 +36,6 @@ World.prototype.resetGrid = function() {
 	console.log("Created new grid of", this.tiles_width, "x", this.tiles_height, "tiles");
 };
 
-// TODO: remove restart() method. Should remove instance of World and create a new one and add players..
-World.prototype.restart = function() {
-	var id, p;
-	this.resetGrid();
-	for (id in this.players) {
-		p = this.players[id];
-		p.alive = true;
-		this.addPlayer(p);
-	}
-	this.paused = true;
-};
 
 World.prototype.allPlayersDied = function() {
 	var id, p, playerAlive = null;
@@ -92,11 +81,6 @@ World.prototype.update = function() {
 	}
 };
 
-World.prototype.createPlayer = function() {
-	var player = new Player(Uuid.v4(), getNextColor(), this.tileSize);
-	this.addPlayer(player);
-	return player;
-};
 
 World.prototype.addPlayer = function(player) {
 	// Initial direction is random
@@ -135,37 +119,25 @@ World.prototype.randomEmptyPosition = function() {
 	return null;
 };
 
+
 World.prototype.getTotalPlayers = function() {
 	return Object.keys(this.players).length;
 };
+
 
 World.prototype.togglePause = function() {
 	this.paused = !this.paused;
 };
 
+
 World.prototype.pause = function(paused) {
 	this.paused = paused;
 };
 
+
 World.prototype.removePlayer = function(player_id) {
 	delete this.players[player_id];
 };
-
-
-
-var COLORS = [
-	'#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a',
-	'#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2',
-	'#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5',
-	'#e21400', '#91580f', '#f8a700', '#f78b00', '#58dc00', '#287b00',
-	'#a8f07a', '#4ae8c4', '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
-];
-var currentColorIndex = 0;
-
-function getNextColor() {
-	currentColorIndex++;
-	return COLORS[currentColorIndex % COLORS.length];
-}
 
 
 module.exports = World;

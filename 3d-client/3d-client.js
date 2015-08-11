@@ -148,7 +148,9 @@ $(function() {
 			}
 		}
 		player = world.players[playerId];
-		plane.setPlayerPosition(player.x, player.y, player.color);
+		if(player != undefined) {
+			plane.setPlayerPosition(player.x, player.y, player.color);
+		}
 	}
 
 	function addCube(x, y, color) {

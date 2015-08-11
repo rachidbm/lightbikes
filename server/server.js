@@ -1,4 +1,5 @@
 "use strict";
+
 var express = require('express');
 var Player = require("./player.js");
 var World = require("./world.js");
@@ -33,7 +34,7 @@ server.listen(port, function() {
   game = new Gameserver();
 
   game.on('started', function() { 
-    console.log('A new game is started');
+    // console.log('A new game is started');
   });
 
   game.on('finished', function() { 
@@ -58,7 +59,7 @@ server.listen(port, function() {
 
 io.on('connection', function(socket) {
 
-  var player = game.world.createPlayer(); // TODO Add player to game. Only on new game it's added to world
+  var player = game.createPlayer(); // TODO Add player to game. Only on new game it's added to world
   socket.userId = player.id;
 
   socket.emit('connected', {
@@ -84,9 +85,8 @@ io.on('connection', function(socket) {
   });
 
   socket.on('disconnect', function() {
-    // remove the userId from global userIds list
     console.log(socket.userId + " disconnected");
-    game.world.removePlayer(socket.userId);
+    game.removePlayer(socket.userId);
 
     socket.broadcast.emit('user left', {
       player: socket.userId,
