@@ -11,10 +11,10 @@ var Player = require("./player.js");
 Game.prototype.__proto__ = EventEmitter.prototype; // extends  EventEmitter
 
 function Game() {
-  this.currentGameId = Uuid.v4();
+  this.id = Uuid.v4();
   this.countingDown = false;
   this.players = {};
-  this.startNewGame(0);
+  this.startNewGame();
 }
 
 
@@ -25,7 +25,8 @@ Game.prototype.update = function() {
 	this.world.update();
 
   if(this.world.allPlayersDied()) {
-    this.restart();
+    this.finishCurrentGame();
+    this.startNewGame();
   } else {
     this.emit('update', {
       totalPlayers: this.world.getTotalPlayers(),
@@ -40,7 +41,7 @@ Game.prototype.createPlayer = function() {
   this.players[player.id] = player;
   if(this.getTotalPlayers() < 2) {
     this.restart();
-  }else if(C.DIRECTLY_JOIN_GAME) {
+  } else if(C.DIRECTLY_JOIN_GAME) {
     this.world.addPlayer(player);
   }
   return player;
@@ -80,16 +81,31 @@ Game.prototype.togglePause = function() {
 
 
 Game.prototype.restart = function() {
-  this.startNewGame(C.COUNTDOWN_SECS);
+  this.abortCurrentGame();
+  this.startNewGame();
 };
 
 
-Game.prototype.startNewGame = function(seconds) {
+Game.prototype.finishCurrentGame = function() {
+  this.emit('finished', {
+    gameId: this.id
+  });
+};
+
+
+Game.prototype.abortCurrentGame = function() {
+  this.emit('aborted', {
+    gameId: this.id
+  });
+};
+
+
+Game.prototype.startNewGame = function() {
   if(this.countingDown) {
     return;
   }
   var id;
-  this.currentGameId = Uuid.v4();
+  this.id = Uuid.v4();
   this.world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE);
   this.world.paused = true;
   for (id in this.players) {
@@ -99,8 +115,7 @@ Game.prototype.startNewGame = function(seconds) {
   this.emit('restart', {
     world: this.world
   });
-  
-  this.startAfterCountdown(seconds);
+  this.startAfterCountdown(C.COUNTDOWN_SECS);
 };
 
 
@@ -120,7 +135,7 @@ Game.prototype.startAfterCountdown = function(seconds) {
         clearInterval(intervalId);
         _this.countingDown = false;
         // Start the game!
-        _this.emit('started', _this.currentGameId);
+        _this.emit('started', _this.id);
         _this.world.pause(false);
       }
   }, 1000);

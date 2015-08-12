@@ -8,22 +8,31 @@ function GameHistory(gameserver) {
 
   this.gameserver.on('started', function gameStarted(gameId) { 
   	var currentTime = new Date().toJSON();
-    console.log('[GameHistory] A new game is started with id;', gameId, 'at', currentTime );
+    // console.log('[GameHistory] - STARTED ', gameId);
     _this.games[gameId] = {started: currentTime};
     // console.log(Object.keys(_this.games).length, ' games in memory: ', _this.games);
     console.log(Object.keys(_this.games).length + ' games in memory');
   });
 
-  this.gameserver.on('finished', function(gameId, winnerId) { 
-    console.log('Game', gameId, 'is won by', winnerId);
+  this.gameserver.on('finished', function(gameId) { 
+    // console.log('[GameHistory] - FINISHED ', gameId);
+    _this.endGame(gameId.gameId);
   });
 
   this.gameserver.on('aborted', function(gameId) { 
-    console.log('Game', gameId, 'is aborted');
+    // console.log('[GameHistory] - ABORTED ', gameId);
+    _this.endGame(gameId.gameId);
   });
-
 }
 
+
+GameHistory.prototype.endGame = function(gameId) {
+  if(this.games[gameId] === undefined) {
+    return; // Game was not started! 
+  }
+  this.games[gameId].ended = new Date().toJSON();
+  // console.log('[GameHistory] - endGame: ',gameId, game);
+};
 
 
 module.exports = GameHistory;
