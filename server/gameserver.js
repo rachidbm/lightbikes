@@ -12,9 +12,9 @@ Game.prototype.__proto__ = EventEmitter.prototype; // extends  EventEmitter
 
 function Game() {
   this.currentGameId = Uuid.v4();
-  this.world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE);
   this.countingDown = false;
   this.players = {};
+  this.startNewGame(0);
 }
 
 
@@ -27,7 +27,6 @@ Game.prototype.update = function() {
   if(this.world.allPlayersDied()) {
     this.restart();
   } else {
-    this.countingDown = false;
     this.emit('update', {
       totalPlayers: this.world.getTotalPlayers(),
       world: this.world
@@ -81,26 +80,26 @@ Game.prototype.togglePause = function() {
 
 
 Game.prototype.restart = function() {
-  if(this.countingDown) {
-    return;
-  }
   this.startNewGame(C.COUNTDOWN_SECS);
 };
 
 
 Game.prototype.startNewGame = function(seconds) {
+  if(this.countingDown) {
+    return;
+  }
   var id;
+  this.currentGameId = Uuid.v4();
   this.world = new World(C.WORLD.WIDTH, C.WORLD.HEIGHT, C.PLAYER.SIZE);
   this.world.paused = true;
   for (id in this.players) {
     this.players[id].alive = true;
     this.world.addPlayer(this.players[id]);
   }
-
   this.emit('restart', {
     world: this.world
   });
-  this.currentGameId = Uuid.v4();
+  
   this.startAfterCountdown(seconds);
 };
 
@@ -123,7 +122,7 @@ Game.prototype.startAfterCountdown = function(seconds) {
         // Start the game!
         _this.emit('started', _this.currentGameId);
         _this.world.pause(false);
-      }   
+      }
   }, 1000);
 };
 

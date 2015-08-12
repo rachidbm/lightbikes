@@ -14,14 +14,14 @@ function GameHistory(gameserver) {
     console.log(Object.keys(_this.games).length + ' games in memory');
   });
 
-  this.gameserver.on('finished', function(winner) { 
-    console.log('Game is won by', winner);
+  this.gameserver.on('finished', function(gameId, winnerId) { 
+    console.log('Game', gameId, 'is won by', winnerId);
   });
 
-}
+  this.gameserver.on('aborted', function(gameId) { 
+    console.log('Game', gameId, 'is aborted');
+  });
 
-
-GameHistory.prototype.update = function() {
 }
 
 
