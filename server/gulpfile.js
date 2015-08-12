@@ -9,7 +9,7 @@ gulp.task('default', function() {
 
  
 gulp.task('lint', function () {
-    gulp.src('*.js')
+    gulp.src(['**/*.js', '!node_modules/**/*.js'])
         .pipe(jslint.run({
             // project-wide JSLint options 
             continue: true,
