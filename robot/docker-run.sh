@@ -5,7 +5,7 @@ echo 'Having problems? Try again after running: ';
 echo '$(boot2docker shellinit)';
 
 export HOST="ws://`boot2docker ip`:3000";
-echo "Agents will connect to: $HOST";
+echo "Robots will connect to: $HOST";
 
 if [ "$1" == "" ]; then	
 	#docker run -e "HOST=$HOST" rachidbm/lightbikes-robot;

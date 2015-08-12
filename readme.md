@@ -15,7 +15,7 @@ When the server is started. Navigate to http://localhost:3000
 # Robots
 Running a robot
 ```
-cd agent
+cd robot
 npm install
 node .
 ```

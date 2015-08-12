@@ -1,17 +1,17 @@
-module.exports = Agent;
+module.exports = Robot;
 
 var C = require("./config");
 
 
-function Agent(id, directionChangedCallback, actionSpeed) {
+function Robot(id, directionChangedCallback, actionSpeed) {
   if (typeof(actionSpeed) === "undefined") { actionSpeed = 1; }
   this.id = id;
   this.tickCounter = 0;
-  this.actionSpeed = actionSpeed; // Every 'x' ticks this Agent does something. Change to 0 for an agent which does nothing
+  this.actionSpeed = actionSpeed; // Every 'x' ticks this Robot does something. Change to 0 for an Robot which does nothing
   this.directionChanged = directionChangedCallback;
 }
 
-Agent.prototype.tick = function(world) {
+Robot.prototype.tick = function(world) {
   this.tickCounter++;
   if (this.tickCounter % this.actionSpeed !== 0) {
     this.tickCounter = 0;
@@ -31,7 +31,7 @@ Agent.prototype.tick = function(world) {
   }
 };
 
-Agent.prototype.calcNextDirection = function(world, player) {
+Robot.prototype.calcNextDirection = function(world, player) {
   var nextPos = calcNextPosition(player);
 
   // Prevent colliding to the border

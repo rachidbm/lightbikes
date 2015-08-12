@@ -1,12 +1,13 @@
 var io = require('socket.io-client');
-var Agent = require('./agent.js');
+var Robot = require('./robot.js');
 
 var host = process.env.HOST || 'ws://localhost:3000';
+var actionSpeed = process.env.AGENT_ACTIONSPEED || 1;
 console.log("Connecting to:", host);
 
 var socket = io(host);
 
-var agent = null;
+var robot = null;
 
 
 function directionChangedCallback(newDirection) {
@@ -16,15 +17,16 @@ function directionChangedCallback(newDirection) {
 
 socket.on('connected', function(data) {
 	console.log("Connected to server, got ID: ", data.id);
-	agent = new Agent(data.id, directionChangedCallback);
+	console.log("Starting robot with actionSpeed:", actionSpeed);
+	robot = new Robot(data.id, directionChangedCallback, actionSpeed);
 	console.log("I am: ", data.world.players[data.id]);
 });
 
 socket.on("disconnect", function() {
 	console.log("disconnected from server");
-	agent = null;
+	robot = null;
 });
 
 socket.on('render', function(data) {
-	agent.tick(data.world);
+	robot.tick(data.world);
 });
