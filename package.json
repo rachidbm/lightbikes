@@ -2,7 +2,9 @@
   "name": "lightbikes-server",
   "version": "0.1.0",
   "description": "Server for multiplayer lightbikes",
-  "main": "server.js",
+  "scripts": {
+    "start": "node server/server.js"
+  },
   "author": "Rachid  Ben Moussa",
   "private": true,
   "license": "GPL",
