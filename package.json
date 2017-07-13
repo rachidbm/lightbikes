@@ -18,7 +18,7 @@
     "jshint-stylish": "2.0.1"
   },
   "engines": {
-    "npm": "2.14.x",
-    "node": "4.2.2"
+    "npm": "4.4.1",
+    "node": "4.8.4"
   }
 }
